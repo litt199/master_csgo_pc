@@ -12,7 +12,8 @@ Vue.use(Pagination)
 import VueLazyload from 'vue-lazyload' 
 Vue.use(VueLazyload)
 
-
+import scroll from 'vue-seamless-scroll'
+Vue.use(scroll)
 
 // 根据路由设置标题
 router.beforeEach((to, from, next) => {

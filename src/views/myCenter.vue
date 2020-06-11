@@ -9,7 +9,17 @@
         </div> -->
         <div class="diceng" v-show="knowimg">
           <img class="diceng_bg" src="../assets/ROLL/8.png" alt="">
-            <marquee  class="dicent_text" width=800 behavior=scroll direction=left  align=middle>{{this.$store.state.mes}}</marquee>
+            <vue-seamless-scroll
+                :data="this.$store.state.newsList"  
+                class="dicent_text"
+                :class-option="optionLeft"
+            >
+               <ul class="item">
+                  <li class="li" v-for="(item,index) in this.$store.state.newsList" :key="index">
+                      <span class="title" v-text="item.content"></span>
+                  </li>
+              </ul>
+            </vue-seamless-scroll>
           <div class="know" v-cursor @click="know">知道了</div>
           <!-- <img src="../assets/ROLL/9.png" class="know" @click="know" alt=""> -->
         </div>
@@ -257,6 +267,7 @@ export default {
     youhuiquan,
 
   },
+ 
   data() {
     return {
       imgbg:this.$store.state.neiimg[1].image,
@@ -351,11 +362,17 @@ export default {
       
     }
   },
-  computed: {
-// 　　isage(){
-// 　　　　return this.Emessage.title
-// 　　}
-  },
+   computed: {
+      optionLeft () {
+          return {
+                  direction: 0,
+                  limitMoveNum: 2,
+                  singleHeight:19,
+                  waitTime:3000
+              }
+      }
+    },
+
   watch:{
     // 　isage(){
     // 　　console.log('Emessage.title发生变化')
@@ -397,7 +414,7 @@ export default {
       //变化分页e
       handleChangefenye(e){
           if(this.youhuiquanstate){
-            console.log('优惠券页')
+
             this.youPageNum=e;
             this.gitCoundList()
           }else{
@@ -477,15 +494,14 @@ export default {
              pageSize:this.youPageSize
          }
           userCenterCoupons(data).then((res)=>{
-              console.log(res)
+      
                 if(res!=undefined){
                     let list = res.data.list
                     this.coundList=list;
             
      
                     this.total=res.data.total;
-                    console.log("------------------优惠券");
-                    console.log(this.coundList);
+          
                     this.changeDate(list);
                 }
           })
@@ -496,11 +512,11 @@ export default {
       Fuensure(){
           var message_id = this.Emessage1.id;
           var stateUpqueding=this.Emessage1.stateUpqueding
-          console.log(message_id)
+        //   console.log(message_id)
           if(stateUpqueding===0){
               this.getGoods(message_id,this.gopindex)  //调用取回方法
           }else if(stateUpqueding===1){
-              console.log(stateUpqueding)
+            //   console.log(stateUpqueding)
               this.sellGoods(message_id,this.gopindex)  //调用出售方法
           }
       },
@@ -528,7 +544,7 @@ export default {
         lists.stateUpqueding=0;   //为了确定是出售还是取回 1，是出售，0是取回
         this.FimgBg_true=true;
         this.isShowTitle=false;
-        console.log(lists)
+        // console.log(lists)
         lists.price=lists.type+'|'+lists.title;
         lists.type=""
         var listJSON = JSON.parse(JSON.stringify(lists))
@@ -636,7 +652,7 @@ export default {
           }
           GetPeople(params).then((res)=>{   //根据中文名获取展示数据
             if(res!=undefined){
-                console.log(res)
+                // console.log(res)
                 that.list = res.data;
                 this.total=res.total;
             }
@@ -711,7 +727,7 @@ export default {
 
       //选好金额，确认提交，出现二维码
       handleClickNextQr(data){
-          console.log(data)
+        //   console.log(data)
           this.recharge=false;
           this.Jutiprice=false;
           this.qrCode = true;
@@ -742,8 +758,7 @@ export default {
         GetProplePrice().then((res)=>{
                 if(res!=undefined){
                     this.message=res.data;
-                    console.log("--------------------个人中心res.data");
-                    console.log(res.data);
+                 
                     if(res.data.transactionUrl==null){
                             this.transactionUrl='请更换交易链接'
                     }else{
@@ -777,7 +792,7 @@ export default {
         }
         postGetGood(data).then((res)=>{
             if(res!=undefined){
-                console.log(res)
+      
                 if(res.code==0){
                     Message({
                         message:res.msg,
@@ -817,7 +832,7 @@ export default {
                         this.list[index].state=3;
                         // console.log(this.list[index].price)
                         var qqqqqq= Number(this.message.money) + this.list[index].price
-                        console.log(qqqqqq)
+                        // console.log(qqqqqq)
                         this.message.money = qqqqqq.toFixed(2);
                         localStorage.setItem('message',this.message.money);
                         Bus.$emit("moneySell",1);//金额变化
@@ -848,7 +863,7 @@ export default {
                 this.$refs.steamLink.value="";
               }else{
                   this.$refs.steamLink.value = this.transactionUrl;
-                  console.log(this.transactionUrl);
+                //   console.log(this.transactionUrl);
               }
               this.tipState = true;
               this.back_bg=true;

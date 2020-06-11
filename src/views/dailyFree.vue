@@ -183,7 +183,7 @@ export default {
         }
         GetLuckDraw().then((res)=>{
             if(res!=undefined){
-             console.log(res)
+            //  console.log(res)
              this.winning=res.data.code;
              this.FreeToReceivefir='已参与';
              this.lotteryNum=0;
@@ -194,7 +194,7 @@ export default {
   mounted(){
       getDailyFree().then((res)=>{
           if(res!=undefined){
-              console.log(res.data.freeGoods)
+            //   console.log(res.data.freeGoods)
             this.list=res.data.freeGoods;
             var  text = res.data.freeGoods.name;
             var str=text.substring(0,text.indexOf(text.match(/\([^\}]+\)/)[0]));//取括号前面的字符串

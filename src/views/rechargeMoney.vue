@@ -48,7 +48,7 @@
             <div class="tjiao">确定提交</div>
         </div>
 
-        <div class="fanhui" @click="GoBack" v-cursor>
+        <div class="fanhui" v-show='youhuistate==0' @click="GoBack" v-cursor>
             返回上一步
         </div>
           <img class="guangbiao" src="../assets/recharge/2.png" alt="">

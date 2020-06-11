@@ -30,11 +30,11 @@ export default new Router({
         title:'Obcase'  
       },
       children:[
-        {
-          path: '/public_box_home/dailyFree',
-          name: 'dailyFree',
-          component: () => import(/* webpackChunkName: "about" */ './views/dailyFree.vue')
-        },
+        // {
+        //   path: '/public_box_home/dailyFree',
+        //   name: 'dailyFree',
+        //   component: () => import(/* webpackChunkName: "about" */ './views/dailyFree.vue')
+        // },
         {
           path: '/public_box_home/faq',
           name: 'faq',

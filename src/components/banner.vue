@@ -3,9 +3,9 @@
    
           <el-carousel :interval="5000" height='399px' arrow="always" indicator-position="none">
             <el-carousel-item v-for="item in imgList" :key="item.id" style="background:#000">
-                <router-link :to='item.link'>
+                
                    <img  v-lazy="item.image" alt="">
-                </router-link>
+                
             </el-carousel-item>
         </el-carousel>
 
@@ -24,7 +24,7 @@ export default {
    data() {
     return {
 
-        imgList:  this.$store.state.imgL
+        imgList:[]
       
     }
   },
@@ -35,7 +35,16 @@ export default {
       
   },
   mounted(){
-   
+        //轮播图
+        const pos={
+          'pos':'home'
+        }
+      getBanner(pos).then((res)=>{
+        if(res!=undefined){
+          // console.log(res.data)
+          this.imgList=res.data;
+        }
+      })
   },
  
 }

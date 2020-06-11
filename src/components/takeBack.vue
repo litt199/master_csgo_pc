@@ -112,7 +112,7 @@ export default {
               id:this.goodsDetail[takeIndex].id,
               index:this.takeIndex
           }
-          console.log(data)
+        //   console.log(data)
           this.$emit('getGood',data)
       },
       exit(){  //点击叉，不显示登陆页面

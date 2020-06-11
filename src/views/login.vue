@@ -9,13 +9,13 @@
         <div class="login_input">
 
             <img class="input_img" src="../assets/login/2.png" alt="">
-            <input class="input" type="text" v-model="phone" @blur="verify_phone(phone)" placeholder="手机号"  name="" id="" v-on:keyup.enter = "handleLogin">
+            <input class="input" type="text" v-model="phone" @blur="verify_phone(phone)" placeholder="手机号"  name="" id="11223" >
         </div>
 
         <div class="yanzhengma">
              <div class="login_input">
                 <div class=" input_yanzheng"></div>
-                <input class="input1" type="text" v-model="code" placeholder="验证码"  name="" id="1" v-on:keyup.enter = "handleLogin">
+                <input class="input1" type="text" v-model="code" placeholder="验证码"  name="" id="14556" >
                 <div class="getma" @click="get_code" v-cursor>
                     <div class="getma_box"></div>
                     <div class="text_yanzhenma">
@@ -29,19 +29,19 @@
         <div class="login_input">
 
             <img class="input_img" src="../assets/login/3.png" alt="">
-            <input class="input" type="password" v-model="password" placeholder="输入密码"  name="" id="2" v-on:keyup.enter = "handleLogin">
+            <input class="input" type="password" v-model="password" placeholder="输入密码"  name="" id="26" >
         </div>
         <div class="login_input">
 
             <img class="input_img" src="../assets/login/3.png" alt="">
-            <input class="input" type="password" v-model="password1" placeholder="再次输入密码"  name="" id="3" v-on:keyup.enter = "handleLogin">
+            <input class="input" type="password" v-model="password1" placeholder="再次输入密码"  name="" id="37">
         </div>
-        <div class="login_input">
+        <!-- <div class="login_input">
   
             <img class="input_img" src="../assets/login/4.png" alt="">
             <input class="input" v-model="invition"  type="text" placeholder="邀请码/选填"  name="" id="4" v-on:keyup.enter = "handleLogin">
         </div>
-        
+         -->
         <div class="textxie">
             <!-- <div>
                 我已阅读并接受<p class="textblack">{{xian}}</p>
@@ -109,7 +109,7 @@ export default {
                 }
                 getCode(params).then((res)=>{
                     if(res!=undefined){
-                        console.log(res)
+                        // console.log(res)
                         if(res.code==1){
                                 Message({                                          //element-ui中的展示请求错误的信息
                                     duration:2000,                                

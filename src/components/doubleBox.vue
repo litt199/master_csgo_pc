@@ -172,8 +172,9 @@ export default {
         -webkit-line-clamp: 1;
         -webkit-box-orient: vertical;
         overflow: hidden;*/
-        width: 70px;
-   
+        width: 100%;
+        position: relative;
+        z-index: 10000;
     }
     .text_right{
         position: absolute;

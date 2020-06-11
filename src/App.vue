@@ -18,6 +18,8 @@
       v-if="reQRCode"
       @goback='handleCodeGoback'
       @changeExit="handleBack_bg"
+      :price='price'
+      :payment='payment'
     ></reQRCode>
   </div>
 </template>
@@ -34,6 +36,7 @@ import {getMessage,getBanner} from './axios/Apilogin'
   const reQRCode =()=>import('./views/reQRCode');  //充值3连跳
   // const Header=()=>import('./components/Header')
   import service from './components/service'
+
 
   export default {
     name: '',
@@ -55,6 +58,7 @@ import {getMessage,getBanner} from './axios/Apilogin'
         reQRCode:false,
         price:0,
         payment:0,
+        timer:"",
       }
     },
     created() {
@@ -66,29 +70,29 @@ import {getMessage,getBanner} from './axios/Apilogin'
       })
 
 
-      // //轮播图
-      // getBanner().then((res)=>{
-      //   if(res!=undefined){
-      //     this.$store.commit('getBanner',res.data)
-      //   }
-      // })
+   
 
       const pos= {
         "pos":"bar"
       }
        getBanner(pos).then((res)=>{
-         console.log(res)
+        //  console.log(res)
         if(res!=undefined){
           this.$store.commit('getNei',res.data)
         }
       })
     },
+    beforeDestroy(){
+      clearInterval(this.timer)
+    },
     mounted(){
+      var that=this;
        getMessage().then((res)=>{   //通知
-         this.$store.commit('getmes',res.data[0].content)
+        if(res!=undefined){
+         
+          localStorage.setItem('mes',JSON.stringify(res.data))
+        }
        })
-
-     
     },
     watch: {
       '$route':'getPath',
@@ -116,12 +120,13 @@ import {getMessage,getBanner} from './axios/Apilogin'
         this.rechargeMoney=false;
       },
     
-      handleClickNextQr(data){  //充值第三页跳第三页
+      handleClickNextQr(data){  //充值第二页跳第三页
          this.recharge=false;
           this.rechargeMoney=false;
-         this.reQRCode = true;
-          this.price=data;
-          this.payment=data;
+          this.reQRCode = true;
+          console.log(data)
+          this.price=data.price;
+          this.payment=data.payment;
       },
 
       handleCodeGoback(){
@@ -137,6 +142,22 @@ import {getMessage,getBanner} from './axios/Apilogin'
 </script>
 
 <style>
+ .dicent_text {
+        overflow: hidden;
+        height: 19px;
+        width: 680px;
+    
+    }
+    ul.item {
+        height: 15px;
+        
+    }
+    .li {
+         width: 680px;
+          float: left;
+          margin-right: 10px;
+      }
+
 .el-pagination.is-background .el-pager li:not(.disabled).active{
     background: #f73f71!important;
     color: #fff!important;

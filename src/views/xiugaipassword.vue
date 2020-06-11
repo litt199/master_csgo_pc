@@ -140,7 +140,7 @@ export default {
                 }
                 getVCode(params).then((res)=>{
                     if(res!=undefined){
-                        console.log(res)
+                        // console.log(res)
                         this.codeMessage=res.data;  //把验证码，储存再data中
                         that.getyanma = 60+'s';
                         that.timer= setInterval(function(){

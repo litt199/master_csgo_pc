@@ -113,16 +113,16 @@ export default {
         ids:-1, //储存上一次的id值
         id:-1,
         list:[
+            // {
+            //     id:1,
+            //     title:"每日免费",
+            //     title_t:"DAILY FREE",
+            //     path:'/public_box_home/dailyFree',
+            //     img1:require('../assets/header/topBar/2.png'),
+            //     img2:require('../assets/header/topBar/2-1.png'),
+            // },
             {
                 id:1,
-                title:"每日免费",
-                title_t:"DAILY FREE",
-                path:'/public_box_home/dailyFree',
-                img1:require('../assets/header/topBar/2.png'),
-                img2:require('../assets/header/topBar/2-1.png'),
-            },
-            {
-                id:2,
                 title:"兑换商城",
                 title_t:"EXCHANGE MALL",
                 path:'/public_box_home/exchangeMall',
@@ -130,7 +130,7 @@ export default {
                 img2:require('../assets/header/topBar/1-1.png'),
             },
             {
-                id:3,
+                id:2,
                 title:"ROLL福利",
                 title_t:"ROLL WELFARE",
                 path:'/public_box_home/Roll',
@@ -139,7 +139,7 @@ export default {
             },
           
             {
-                id:4,
+                id:3,
                 title:"CSGO开箱",
                 title_t:"STAR MEMBER",
                 path:'/public_box_home/csgo',
@@ -147,7 +147,7 @@ export default {
                 img2:require('../assets/header/topBar/5.png'),
             },
             {
-                id:5,
+                id:4,
                 title:"常见问题",
                 title_t:"QUESTIONS",
                 path:'/public_box_home/faq',
@@ -191,6 +191,7 @@ export default {
     
         if(content==1){
             _this.stateRegister=true;
+            _this.loginTu=true;
         }
     })
     Bus.$on("currentPath",data=>{
@@ -210,7 +211,7 @@ export default {
         })
     })
     Bus.$on("moneySell",data=>{
-        console.log('触发')
+        // console.log('触发')
         if(data==1){
             this.getMoney();
         }
@@ -222,14 +223,27 @@ export default {
       if(token!=null){
           this.loginTu = false;
       }
-    var message = localStorage.getItem('message');
-    if(message!=null){
-        this.mmoney=message
-    }
-    var name = localStorage.getItem('name');
-    
-    if(message!=null){
-        this.nickName=name
+        var message = localStorage.getItem('message');
+        if(message!=null){
+            this.mmoney=message
+        }else{
+            this.loginTu=true;
+        }
+        var name = localStorage.getItem('name');
+        
+        if(message!=null){
+            this.nickName=name
+        }else{
+            this.loginTu=true;
+
+        }
+    var avatar = localStorage.getItem('avatar');
+
+    if(avatar=="null"){
+      
+    }else{
+ 
+        this.avatar=avatar
     }
   },
   methods:{
@@ -255,7 +269,7 @@ export default {
 
       //出现忘记密码窗口
       handleWangjimima(){
-          console.log('123')
+        //   console.log('123')
           this.stateRegister=false;
           this.xiugai=true;
       },
@@ -336,7 +350,7 @@ export default {
       //点击header小人，判断是否登录，登录就进入个人中心页面，否则就跳出登录页
       TmyCenter(){
         GetProplePrice().then((res)=>{
-            console.log(res)
+            // console.log(res)
                 if(res!=undefined){
                     this.$router.push({
                         path:'/public_box_home/myCenter'
@@ -387,10 +401,11 @@ export default {
                         if(res.data.avatar!=null){
                             this.avatar=res.data.avatar;
                         }
+                        localStorage.setItem('avatar',res.data.avatar)
                         localStorage.setItem('message',res.data.money)
                         localStorage.setItem('name',res.data.nickName)
-                        console.log("-------------res.data");
-                        console.log(res.data);
+                        // console.log("-------------res.data");
+                        // console.log(res.data);
                  }
             })
       },
@@ -630,6 +645,7 @@ export default {
         width: 33px;
         margin-right: 12px;
         margin-left: 8px;
+        border-radius:50%;
     }
     .rigth_text p:nth-child(2){
         color:#c52b64;

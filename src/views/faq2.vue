@@ -8,7 +8,17 @@
       </div> -->
       <div class="diceng" v-show="knowimg">
           <img class="diceng_bg" src="../assets/ROLL/8.png" alt="">
-            <marquee  class="dicent_text" width=800 behavior=scroll direction=left  align=middle>{{this.$store.state.mes}}</marquee>
+           <vue-seamless-scroll
+                :data="this.$store.state.newsList"  
+                class="dicent_text"
+                :class-option="optionLeft"
+            >
+               <ul class="item">
+                  <li class="li" v-for="(item,index) in this.$store.state.newsList" :key="index">
+                      <span class="title" v-text="item.content"></span>
+                  </li>
+              </ul>
+            </vue-seamless-scroll>
           <div class="know" v-cursor @click="know">知道了</div>
           <!-- <img src="../assets/ROLL/9.png" class="know" @click="know" alt=""> -->
         </div>
@@ -70,6 +80,16 @@ export default {
   },
   data() {
     return {
+        computed: {
+      optionLeft () {
+          return {
+                  direction: 0,
+                  limitMoveNum: 2,
+                  singleHeight:19,
+                  waitTime:3000
+              }
+      }
+    },
         faqTrue:false,
         knowimg:true,
         question:[

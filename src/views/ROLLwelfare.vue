@@ -8,7 +8,19 @@
       </div> -->
       <div class="diceng" v-show="knowimg">
           <img class="diceng_bg" src="../assets/ROLL/8.png" alt="">
-            <marquee  class="dicent_text" width=800 behavior=scroll direction=left  align=middle>{{this.$store.state.mes}}</marquee>
+            <!-- <marquee  class="dicent_text" width=800 behavior=scroll direction=left  align=middle>{{this.$store.state.mes}}</marquee> -->
+
+            <vue-seamless-scroll
+                :data="newsList"  
+                class="dicent_text"
+                :class-option="optionLeft"
+            >
+               <ul class="item">
+                  <li class="li" v-for="(item,index) in newsList" :key="index">
+                      <span class="title" v-text="item.content"></span>
+                  </li>
+              </ul>
+            </vue-seamless-scroll>
           <div class="know" v-cursor @click="know">知道了</div>
           <!-- <img src="../assets/ROLL/9.png" class="know" @click="know" alt=""> -->
         </div>
@@ -76,9 +88,26 @@ export default {
     doubleBox,
     rechargeMoney,
   },
+   computed: {
+      optionLeft () {
+          return {
+                  direction: 0,
+                  limitMoveNum: 2,
+                  singleHeight:19,
+                  waitTime:3000
+              }
+      }
+    },
   data() {
     return {
-        imgbg:this.$store.state.neiimg[1].image,
+       imgbg:this.$store.state.neiimg[1].image,
+       newsList: [{
+         "content":1234
+       },
+       {
+         "content":1234
+       }
+       ],
         total: 1,     //记录总条数
         pageLength:8,//每页显示条数
         current: 1,   //当前的页数
@@ -116,6 +145,9 @@ export default {
     this.img = image;
   },
   mounted(){
+    var news=JSON.parse(localStorage.getItem('mes'));
+
+    this.newsList=news;
     const params={
       'pageNum':this.pageNum,
       'pageSize':this.pageLength,
@@ -127,7 +159,7 @@ export default {
         this.current=1;
         this.total=res.total;
         this.fir = res.data;
-        console.log(res)
+        // console.log(res)
       }
     })
   },
@@ -158,7 +190,7 @@ export default {
         getRolldata(params).then(res=>{
           if(res!=undefined){
             this.current=1;
-            console.log("-----------------父组件current" + this.current);
+            // console.log("-----------------父组件current" + this.current);
             this.total=res.total;
             this.fir = res.data;
           }
@@ -192,11 +224,7 @@ export default {
     left: 0;
     top: 0;
 }
-.bg{
-  /* position: absolute;
-  left: 0;
-  top: 0; */
-}
+
 .ROLLfuli123{
   position: absolute;
   width: 100%;
@@ -289,5 +317,6 @@ export default {
     top: 1130px;
     right: 100px;
 }
+
 </style>
 

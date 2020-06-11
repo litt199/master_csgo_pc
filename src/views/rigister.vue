@@ -12,13 +12,13 @@
         <div class="login_input">
             <div class="linxing"></div>
             <img class="input_img" src="../assets/login/2.png" alt="">
-            <input class="input" type="text" placeholder="手机号" style="color:#fff" v-model="phone"  @input="Phone"  name="" id="123" v-on:keyup.enter = "login1">
+            <input class="input" type="text" placeholder="手机号" style="color:#fff" v-model="phone"  @input="Phone"  name="" id="111123" v-on:keyup.enter = "login1">
         </div>
 
         <div class="login_input">
             <div class="linxing"></div>
             <img class="input_img" src="../assets/login/2.png" alt="">
-            <input class="input" type="password" v-model="password" placeholder="请输入您的密码"  name="" id="456" v-on:keyup.enter = "login1">
+            <input class="input" type="password" v-model="password" placeholder="请输入您的密码"  name="" id="4323256" v-on:keyup.enter = "login1">
         </div>
 
          <div class="login_input login_input1"   @click="login1">

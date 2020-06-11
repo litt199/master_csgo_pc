@@ -72,16 +72,16 @@
                 // console.log(this.imgPrice)
             },1000)
             var pri;
-             console.log(this.payment)
+        
             if(this.couponId!=""&&this.id!=""){
-                console.log('使用优惠券')
+          
                 pri={
                     "couponId":this.couponId,
                     "money":this.payment,
                     "userCouponId":this.id
                  }
             }else{
-                console.log('不适用')
+                // console.log('不适用')
                  pri={
                     "money":this.payment
                  }
@@ -90,7 +90,7 @@
          
             PostPayalipy(pri).then((res)=>{//获取payUrl
                 if(res!=undefined){
-                     console.log(res)
+                    //  console.log(res)
                     if(res.code===0){
                             var img=res.data.payUrl;
                             this.img=img;

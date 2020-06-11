@@ -7,7 +7,17 @@
         </div>
         <div class="diceng" v-show="knowimg">
             <img class="diceng_bg" src="../assets/ROLL/8.png" alt="">
-             <marquee  class="dicent_text" width=800 behavior=scroll direction=left  align=middle>{{this.$store.state.mes}}</marquee>
+            <vue-seamless-scroll
+                :data="this.$store.state.newsList"  
+                class="dicent_text"
+                :class-option="optionLeft"
+            >
+               <ul class="item">
+                  <li class="li" v-for="(item,index) in this.$store.state.newsList" :key="index">
+                      <span class="title" v-text="item.content"></span>
+                  </li>
+              </ul>
+            </vue-seamless-scroll>
             <div class="know" v-cursor @click="know">知道了</div>
             <!-- <img src="../assets/ROLL/9.png" class="know" @click="know" alt=""> -->
         </div>
@@ -134,10 +144,31 @@
 
             </div>
         </div>
-        <div class="fillPassword" v-show="fillPasswordjoin">
+       <!-- <div class="fillPassword" v-show="fillPasswordjoin">
                 <input type="text" v-model="passwordfoll" placeholder="输入密码参加活动">
                 <div class="quert" v-cursor @click="fillPassClick(message.id)">确定</div>
-        </div>
+        </div>-->
+
+      <div class="fillPassword" v-show="fillPasswordjoin">
+        <div class="exit" @click="exit" v-cursor>x</div>
+        <div class="login_top">
+              <img class="top_img" src="../assets/login/1.png" alt="">
+              <p class="text_zhuce">参与密码</p>
+              <img class="top_img" src="../assets/login/1.png" alt="">
+          </div>
+          <div class="login_input">
+              <div class="linxing"></div>
+              <input class="input" type="text" placeholder="输入密码参加活动" style="color:#fff"  v-model="passwordfoll" >
+          </div>
+          <div class="login_input login_input1"   @click="fillPassClick(message.id)">
+  
+              <div class="tjiao">确定</div>
+          </div>
+          <img class="register_bgc" src="../assets/register/1.png" alt="">
+    </div>
+    <div v-show="back_bg" @click="handleBack_bg" class="black_bg"></div>
+
+
   </div>
 </template>
 
@@ -168,11 +199,22 @@ export default {
       linxingBox,
       fenye
   },
+   computed: {
+      optionLeft () {
+          return {
+                  direction: 0,
+                  limitMoveNum: 2,
+                  singleHeight:19,
+                  waitTime:3000
+              }
+      }
+    },
   data() {
     return {
       imgbg:this.$store.state.neiimg[1].image,
-avatar:require('../assets/avatar/logo_icon.png'),//头像
+      avatar:require('../assets/avatar/logo_icon.png'),//头像
         knowimg:true,
+        back_bg:false,
         fillPasswordjoin:false,  //参加又密码的活动，显示填写密码
         urserAndPrize:true, //活动正在进行时，显示用户和奖品展示
         passwordfoll:"",  //填入密码
@@ -202,9 +244,27 @@ avatar:require('../assets/avatar/logo_icon.png'),//头像
         this.getRollFuli();
   },
   methods:{
+    //取消
+    handleBack_bg(){
+        this.fillPasswordjoin=false;
+        this.back_bg=false;
+        this.move(); 
+    },
     know(){
       this.knowimg=false
     },
+    /***滑动限制***/
+      stop(){
+        var mo=function(e){e.preventDefault();};  //e.preventDefault是取消事件的默认动作
+        document.body.style.overflow='hidden';
+        document.addEventListener("touchmove",mo,false);//禁止页面滑动   //监听touchmove 鼠标滚动事件，
+      },
+      /***取消滑动限制***/
+      move(){
+        var mo=function(e){e.preventDefault();};  
+        document.body.style.overflow='';//出现滚动条
+        document.removeEventListener("touchmove",mo,false);
+      },
       getRollFuli(){//获取当前信息
           var that=this;
           let Rollid=this.$route.query.Rollid;  // 带过来的id
@@ -212,8 +272,8 @@ avatar:require('../assets/avatar/logo_icon.png'),//头像
           getRollFuli(Rollid).then((res)=>{
             if(res!=undefined){
               this.message=res.data;
-              console.log("---------------------rll福利res.data");
-              console.log(res.data);
+              // console.log("---------------------rll福利res.data");
+              // console.log(res.data);
                 var dataList = res.data.rollGoods;
                 var datafunList = this.dataList(dataList)
                 this.rollGoods=datafunList;
@@ -269,8 +329,8 @@ avatar:require('../assets/avatar/logo_icon.png'),//头像
             }
             });
          return data;
-         console.log("------------------data");
-         console.log(data);
+        //  console.log("------------------data");
+        //  console.log(data);
      },
     //填写密码参与
     fillPassClick(id){
@@ -291,6 +351,18 @@ avatar:require('../assets/avatar/logo_icon.png'),//头像
                 type:'success'
               })
               this.fillPasswordjoin=false
+              this.back_bg=false;
+              this.move();
+              this.ba
+              let Rollid=this.$route.query.Rollid;  // 密码参与后立即更新参与用户信息
+              getRollFuli(Rollid).then((res)=>{
+                if(res!=undefined){
+                  this.message=res.data;
+                    var dataList = res.data.rollGoods;
+                    var datafunList = this.dataList(dataList)
+                    this.rollGoods=datafunList;
+                }
+              })
           }
         }
      
@@ -331,6 +403,8 @@ avatar:require('../assets/avatar/logo_icon.png'),//头像
            //  })
       }else if(res.code===2){
         this.fillPasswordjoin=true;
+        this.back_bg=true;
+        this.stop();
       }else if(res.code==3){
            Message({
               message:res.msg,
@@ -385,6 +459,11 @@ avatar:require('../assets/avatar/logo_icon.png'),//头像
               
         },1000)
     },
+    exit(){
+      this.fillPasswordjoin=false;
+      this.back_bg=false;
+      this.move();
+    }
    /* pagechange(currentPage){//根据当前页数请求渲染数据
     this.fenyeList = this.message.joinUser.slice((currentPage-1)*this.pageLength,currentPage*this.pageLength)
     },*/
@@ -684,7 +763,7 @@ avatar:require('../assets/avatar/logo_icon.png'),//头像
     margin-bottom: 17px;
     margin-left: 20px;
 }
-.fillPassword{
+/*.fillPassword{
   width: 300px;
   height: 100px;
   background-color: #fff;
@@ -699,7 +778,7 @@ avatar:require('../assets/avatar/logo_icon.png'),//头像
 .quert{
   border: 1px solid #333;
   margin-left: 20px;
-}
+}*/
 .fenye{
     width: 100%;
     height: 100px;
@@ -767,5 +846,217 @@ avatar:require('../assets/avatar/logo_icon.png'),//头像
   background: #646464;
 
 }
+/*******************************************************************************************************************/
+ .fillPassword{
+        position: fixed;
+        top: 30%;
+        left: 50%;
+        width: 490px;
+        height: 325px;
+        background: linear-gradient( #201217, #0f0f0f);
+        background-image:-moz-linear-gradient(#201217,#0f0f0f);
+        background-image:-ms-linear-gradient(#201217,#0f0f0f);
+        background-image:-o-linear-gradient(#201217,#0f0f0f);
+        background-image:linear-gradient(#201217,#0f0f0f);
+        transform: translate(-50%);
+        z-index: 999;
+        /* background: linear-gradient(#232123, #65072c); */
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+
+    }
+    .register_bgc{
+        width: 535px;
+        height: 360px;
+        position: absolute;
+        top: -15px;
+        z-index: -1;
+    }
+    .exit{
+        position: absolute;
+        top: 0px;
+        color: #fff;
+        font-size:30px;
+        right: 10px;
+    }
+    .login_top{
+        display: flex;
+        width: 160px;
+        margin: 36px auto 20px;
+        position: relative;
+      
+    }
+    .top_img{
+        width: 27px;
+        height: 45px;
+    }
+    .text_zhuce{
+        font-size: 26px;
+        color:#e60f64;
+        width: 105px;
+        text-align: center;
+        line-height: 32px;
+    
+        font-weight: 700;
+            position: relative;
+    top: 6px;
+    left: 2px;
+    }
+    .login_input{
+        position: relative;
+        width: 336px;
+        height: 42px;
+        margin-top: 25px;
+    }
+   
+    .linxing{
+        width: 100%;
+        height: 100%;
+        position: absolute;
+        top: 0;
+        box-shadow: 0px 0px 10px rgba(177, 62, 86, 0.5);
+        left: 0;
+        border-radius: 5px;
+        border: 1px solid #691534;
+        background-color: #151414;
+    }
+    .linxing1{
+        width: 100%;
+        height: 100%;
+        position: absolute;
+        top: 0;
+        left: 0;
+        box-shadow: 0px 0px 10px rgba(177, 62, 86, 0.5);
+        border-radius: 5px;
+        border: 1px solid #691534;
+        background:linear-gradient(to right,#ba023f,#ff537b);
+        background:-webkit-linear-gradient(to right,#ba023f,#ff537b);
+        background:-moz-linear-gradient(to right,#ba023f,#ff537b);
+        background:-ms-linear-gradient(to right,#ba023f,#ff537b);
+        background:-o-linear-gradient(to right,#ba023f,#ff537b);
+    }
+    .tjiao{
+        font-size: 16px;
+        position: absolute;
+        top:50%;
+        right: 41%;
+        z-index: 2;
+        transform: translate(-50%,-50%);
+        -webkit-transform: translate(-50%,-50%);
+        -moz-transform: translate(-50%,-50%);
+        -ms-transform: translate(-50%,-50%);
+        -o-transform: translate(-50%,-50%);
+        color: #fff;
+ 
+        font-weight: 700;
+    }
+     .input_img{
+        position: absolute;
+        top: 7px;
+        left: 18px;
+    }
+    input:-webkit-autofill,
+    input:-webkit-autofill:hover,
+    input:-webkit-autofill:focus,
+    input:-webkit-autofill:active {
+        -webkit-transition-delay: 99999s;
+        -webkit-transition: color 99999s ease-out, background-color 99999s ease-out;
+    }
+    .input{
+        position: absolute;
+        z-index: 2;
+        top: 50%;
+        left: 50%;
+        transform: translate(-50%,-50%);
+        -webkit-transform: translate(-50%,-50%);
+        -moz-transform: translate(-50%,-50%);
+        -ms-transform: translate(-50%,-50%);
+        -o-transform: translate(-50%,-50%);
+        width: 206px;
+        height: 25px;
+        background: none;
+        border: none;
+        color: #fff;
+        font-size: 16px;
+        font-style: italic;
+        left: 116px;
+    }
+     input::-webkit-input-placeholder{
+        color:#e60f64;
+    }
+    input::-moz-placeholder{
+    color:#e60f64;
+    }
+    input:-ms-input-placeholder{
+    color:#e60f64;
+    }
+    .input{
+
+        width: 206px;
+        height: 25px;
+        background: none;
+        border: none;
+        color: #fff;
+        font-size: 16px;
+        font-style: italic;
+    }
+    .input1{
+    
+
+        width: 181px;
+        height: 25px;
+        background: none;
+        border: none;
+        color: #fff;
+        font-size: 16px;
+        font-style: italic;
+    }
+    input::-webkit-input-placeholder{
+        color:#e60f64;
+    }
+    input::-moz-placeholder{
+     color:#e60f64;
+    }
+    input:-ms-input-placeholder{
+    color:#e60f64;
+    }
+    .input_img{
+        position: absolute;
+        top: 7px;
+        left: 18px;
+    }
+     .login_input{
+        position: relative;
+        width: 336px;
+        height: 42px;
+        margin-top:21px;
+        border: 1px solid #b13e55;
+        border-radius:5px;
+        text-align: center;
+        line-height: 38px;
+        box-shadow: 0px 0px 10px rgba(177, 62, 86, 0.5);
+
+    }
+    .login_input1{
+        margin-top: 64px;
+        cursor:pointer;
+         line-height: 42px;
+          background:linear-gradient(to right,#ba023f,#ff537b);
+        background:-webkit-linear-gradient(to right,#ba023f,#ff537b);
+        background:-moz-linear-gradient(to right,#ba023f,#ff537b);
+        background:-ms-linear-gradient(to right,#ba023f,#ff537b);
+        background:-o-linear-gradient(to right,#ba023f,#ff537b);
+    }
+    .black_bg{
+      width: 100%;
+      height: 1080px;
+      position: fixed;
+      background: #000;
+      opacity: 0.3;
+      z-index: 50;
+      top: 0;
+      left: 0;
+    }
 </style>
 

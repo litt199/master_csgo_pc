@@ -52,7 +52,7 @@ export default {
          }
       },
         handleClickQuset(){
-          console.log(this.$route.path)
+        //   console.log(this.$route.path)
             if(this.$route.path.indexOf('/public_box_home')==0){
                this.$router.push({
                     path:'faq'

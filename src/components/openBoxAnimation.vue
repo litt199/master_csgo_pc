@@ -100,7 +100,7 @@ export default {
     const id=this.$route.query.id;
     GetBoxShowing(id).then((res)=>{  //获取所有的箱子内容
       if(res!=undefined){
-        console.log(res.data[0])  //获取箱子的信息
+        // console.log(res.data[0])  //获取箱子的信息
         let message = {};
         message.name=res.data[0].box.name;
         message.number=res.data[0].goodsList.length;
@@ -132,7 +132,7 @@ export default {
         }else if(e===1){
             this.idsindex=e;
           if(this.timer){
-            console.log('正在开箱')
+            // console.log('正在开箱')
             return
           }else{
             this.$router.push({
@@ -142,7 +142,7 @@ export default {
            
         }else if(e===2){
           if(this.timer){
-            console.log('正在开箱')
+            // console.log('正在开箱')
             return
           }else{
               this.idsindex=e;
@@ -224,7 +224,7 @@ export default {
           var arrlist=[];
           arrlist[0]  = arr;
           var q = that.shuaixuanyanse(arrlist);
-          console.log(q[0])
+          // console.log(q[0])
           suffleList[62]=q[0];
 
   
@@ -284,7 +284,7 @@ export default {
         if(this.timer){
             return
           }
-          console.log(this.$route.query.id)
+          // console.log(this.$route.query.id)
         const data={
           "openNum":1,
           "id":this.$route.query.id

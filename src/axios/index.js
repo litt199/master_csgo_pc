@@ -68,15 +68,15 @@ instance.interceptors.response.use(response=>{
     return response
 },error=>{      //响应错误
     //  loadingInstance.close();  //同样的，也需要关闭loadling
-     console.log(error.response.status)
+    //  console.log(error.response.status)
      let tips = error.response.status in httpCode?httpCode[error.response.status]:err.response.message;  //判断，我上面的httpcode有没有返回的状态码，如果有就获取上面的对应的信息，没有就获取返回的信息
     
      if(error.response.status==401){  //判断登录权限问题，或者未登录，要跳转到登录页面
-        console.log(localStorage.getItem('token'))
+        // console.log(localStorage.getItem('token'))
         Bus.$emit('MoreLogin',1)   //利用兄弟组件传参，来实现登录页面自动显示
   
-        // localStorage.removeItem('message')
-        // localStorage.removeItem('name')
+        localStorage.removeItem('message')
+        localStorage.removeItem('name')
      }
      else{
         Message({

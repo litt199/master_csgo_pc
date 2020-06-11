@@ -108,15 +108,19 @@ import {GetOpenBox} from '../axios/PersonalApi'
             const id='032bc9ce719c4416a825b53fc42e900e'
             GetBoxShowing(id).then((res)=>{  //获取所有的箱子内容
             if(res!=undefined){
-                console.log(res)
+                // console.log(res)
                 var bigArray = Array(80);
+                if(res.data!=""){
                 var smallArray = res.data[0].goodsList;
+               
                 var xunhuanBigArray=this.HpArray(smallArray,bigArray)
                 this.list=xunhuanBigArray;
                 this.list1= JSON.parse(JSON.stringify(xunhuanBigArray));
                 this.list2= JSON.parse(JSON.stringify(xunhuanBigArray));
                 this.list3= JSON.parse(JSON.stringify(xunhuanBigArray));
                 this.list4= JSON.parse(JSON.stringify(xunhuanBigArray));
+                }
+           
              }
             })    
         },

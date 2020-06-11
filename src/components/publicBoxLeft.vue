@@ -62,7 +62,7 @@ export default {
   mounted(){
       getPublicBoxLeftImg().then((res)=>{
         if(res!=undefined){
-            console.log(res)
+            // console.log(res)
             var dataList = res.data;
             dataList.forEach((item,i) => {
                 item.state=false;
@@ -107,9 +107,9 @@ export default {
               }
             });
             this.list=dataList;
-            console.log(this.avatar);
-            console.log('----------------dataList');
-            console.log(dataList)
+            // console.log(this.avatar);
+            // console.log('----------------dataList');
+            // console.log(dataList)
         }
        
       })
@@ -134,7 +134,7 @@ export default {
        upDateleftRes(){
              this.leftTimer = setInterval( () =>{
                  getPublicBoxLeftImg().then((res)=>{
-                   console.log(res)
+                  //  console.log(res)
                    if(res!=undefined){
                   
                      var dataList=res.data;

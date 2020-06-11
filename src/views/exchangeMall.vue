@@ -9,7 +9,20 @@
     
       <div class="diceng" v-show="knowimg">
           <img class="diceng_bg" src="../assets/ROLL/8.png" alt="">
-            <marquee  class="dicent_text" width=800 behavior=scroll direction=left  align=middle>{{this.$store.state.mes}}</marquee>
+            
+            <vue-seamless-scroll
+                :data="this.$store.state.newsList"  
+                class="dicent_text"
+                :class-option="optionLeft"
+            >
+               <ul class="item">
+                  <li class="li" v-for="(item,index) in this.$store.state.newsList" :key="index">
+                      <span class="title" v-text="item.content"></span>
+                  </li>
+              </ul>
+            </vue-seamless-scroll>
+
+
           <div class="know" v-cursor @click="know">知道了</div>
           <!-- <img src="../assets/ROLL/9.png" class="know" @click="know" alt=""> -->
         </div>
@@ -120,8 +133,24 @@ export default {
     xuanzhuan1,
 
   },
+    computed: {
+      optionLeft () {
+          return {
+                  direction: 0,
+                  limitMoveNum: 2,
+                  singleHeight:19,
+                  waitTime:3000
+              }
+      }
+    },
   data() {
     return {
+       newsList: [{
+         "content":1234
+       },
+       {
+         "content":1234
+       }],
       imgbg:this.$store.state.neiimg[0].image,
         duihuanBtn:"确认兑换",
         total: 1,     //记录总条数
@@ -203,6 +232,10 @@ export default {
 
   },
     mounted(){
+       var news=JSON.parse(localStorage.getItem('mes'));
+
+       this.newsList=news;
+
         this.getAllGoods();
         // Bus.$emit("search",this.search())
   },
@@ -233,7 +266,7 @@ export default {
         }
         getFirexchangeMall(params).then((res)=>{   //获取兑换商城的内容
           if(res!=undefined){
-              console.log(res.data)
+              // console.log(res.data)
               this.goodsName="全部"
               this.textInput=""
               // that.fir = res.data;
@@ -286,16 +319,20 @@ export default {
  
     //确定兑换商品
     handleBind(e){
-      console.log('12334')
+      // console.log('12334')
       const data={
         id:e
       }
       postExchange(data).then((res)=>{
         if(res!=undefined){
+     
            Message({
             message:res.msg,
             type:'success'
           })
+          if(res.msg=="账户余额不足"){
+             Bus.$emit("yao",1);
+          }
           this.xuanzhuan=false;
           this.back_bg=false;
           Bus.$emit('moneySell',1)
@@ -349,7 +386,7 @@ export default {
         if(res!=undefined){
           // this.fir = res.data
           this.total=res.total
-          console.log("--------------total:"+res.total);
+          // console.log("--------------total:"+res.total);
           var dataList = res.data;
           var datafunList = this.dataList(dataList)
           this.fir=datafunList;
@@ -424,7 +461,7 @@ export default {
             if(res!=undefined){
                 // that.fir = res.data;
                 this.total=res.total
-                console.log("--------------total:"+res.total);
+                // console.log("--------------total:"+res.total);
                 var dataList = res.data;
                 var datafunList = this.dataList(dataList)
                 that.fir=datafunList;

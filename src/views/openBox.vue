@@ -10,7 +10,17 @@
         </div> -->
         <div class="diceng" v-show="knowimg">
           <img class="diceng_bg" src="../assets/ROLL/8.png" alt="">
-            <marquee  class="dicent_text" width=800 behavior=scroll direction=left  align=middle>{{this.$store.state.mes}}</marquee>
+            <vue-seamless-scroll
+                :data="this.$store.state.newsList"  
+                class="dicent_text"
+                :class-option="optionLeft"
+            >
+               <ul class="item">
+                  <li class="li" v-for="(item,index) in this.$store.state.newsList" :key="index">
+                      <span class="title" v-text="item.content"></span>
+                  </li>
+              </ul>
+            </vue-seamless-scroll>
           <div class="know" v-cursor @click="know">知道了</div>
           <!-- <img src="../assets/ROLL/9.png" class="know" @click="know" alt=""> -->
         </div>
@@ -177,6 +187,16 @@ export default {
       fiveliankai,
    
   },
+   computed: {
+      optionLeft () {
+          return {
+                  direction: 0,
+                  limitMoveNum: 2,
+                  singleHeight:19,
+                  waitTime:3000
+              }
+      }
+    },
   data() {
     return {
       imgbg:this.$store.state.neiimg[1].image,
@@ -227,8 +247,7 @@ export default {
             // console.log(res)
             if(res!=undefined){
             this.box[0] = res.data[0].box;
-            console.log("-----------openbox");
-            console.log(res.data)
+     
             this.boxStroge[0] = res.data[0].box;
             var listRes = res.data[0].goodsList;
             this.listNumbers = listRes.length;  //获取长度
@@ -267,8 +286,7 @@ export default {
             this.list = listRes;
             this.total=this.list.length;
             this.fenyeList = this.list.slice(0,24);
-            console.log("-------------fenyeList");
-            console.log(this.fenyeList);
+          
             // this.bgImg = this.box[0].bgImage; //箱子背景
             this.price = this.box[0].price;  //
             var fivep = this.box[0].price *5;
@@ -318,7 +336,7 @@ export default {
 
       //确定奖品展现弹窗
       shudingjiangping(data){
-          console.log(data)
+
           this.shuqding=true;
           this.message=data;
       },
