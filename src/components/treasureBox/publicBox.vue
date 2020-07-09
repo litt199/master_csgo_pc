@@ -115,7 +115,7 @@ export default {
     height: 72px;
     margin-left: 12px;
     position: absolute;
-    top: 19px;
+    top: 4px;
     left: 12px;
     z-index: 4;
 }
@@ -175,7 +175,7 @@ export default {
 }
 @keyframes topfly{
     from{
-        top: 19px;
+        top: 4px;
     }
     to{
         top: 15px;

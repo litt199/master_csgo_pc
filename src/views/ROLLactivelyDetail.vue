@@ -100,7 +100,7 @@
                         </div>
                     
                     </div>
-                    <div class="Double_box">
+                    <div class="Double_box Double_box_Jiang">
                           <publicDobleColor 
                           v-for="(item,index) in message.rollGoods" 
                           class="doblebox" 
@@ -211,7 +211,7 @@ export default {
     },
   data() {
     return {
-      imgbg:this.$store.state.neiimg[1].image,
+      imgbg:this.$store.getters.neiimg2.image,
       avatar:require('../assets/avatar/logo_icon.png'),//头像
         knowimg:true,
         back_bg:false,
@@ -740,10 +740,19 @@ export default {
   padding-top: 20px;
 
 }
-
+.Double_box_Jiang{
+  width: 992px;
+  max-height: 400px;
+  overflow-x: scroll;
+  -ms-overflow-style: none;
+  overflow: -moz-scrollbars-none; 
+}
+.Double_box_Jiang::-webkit-scrollbar{
+    display: none;
+}
 .Double_box_User{
   width: 992px;
-  height: 500px;
+  max-height: 400px;
   overflow-x: scroll;
   -ms-overflow-style: none;
   overflow: -moz-scrollbars-none; 

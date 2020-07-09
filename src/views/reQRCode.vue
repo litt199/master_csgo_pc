@@ -19,12 +19,12 @@
         <div  id="qrcode" ref="qrcode"></div>
 
         <div class="rqTishi">
-            <p>用手机扫码支付完成后，请到账户中心查询余额</p>
+            <p>用手机扫码支付完成后，请立即刷新查询账户余额</p>
         </div>
-        <!-- <div class="fanhui" @click="GoBack" v-cursor>
+        <div class="fanhui" @click="reFresh" v-cursor>
             <div class="linxing1"></div>
-            <div class="fanhui_back">返回上一步</div>
-        </div> -->
+            <div class="fanhui_back">立即刷新</div>
+        </div>
 
           <img class="guangbiao" src="../assets/recharge/2.png" alt="">
 
@@ -32,9 +32,10 @@
 </template>
 
 <script>
+
     import QRCode from 'qrcodejs2'
     import Bus from "../axios/Bus"
-    import {GetpayqrCode, PostPayalipy} from '../axios/Apilogin'
+    import {GetpayqrCode, PostPayalipy,GetProplePrice} from '../axios/Apilogin'
     import { Message } from 'element-ui';
     export default {
 
@@ -112,7 +113,11 @@
             GoBack(){
                 this.$emit('goback')
             },
-         
+            reFresh(){   //刷新页面
+                Bus.$emit('shuaxin',1);
+                Bus.$emit('moneySell',1)
+                this.$emit('changeExit');
+            },
             //获取二维码的实例 
             qrcode() {
                 let qrcode = new QRCode('qrcode', {
@@ -137,7 +142,7 @@
 <style scoped>
     .recharge123{
         position: fixed;
-        top: 50%;
+        top: 54%;
         left: 50%;
         width: 490px;
         height: 677px;
@@ -208,7 +213,7 @@
     .linxing1{
         position: absolute;
         top: 448px;
-        left: 74px;
+        left: 78px;
         border-radius: 5px;
         border: 1px solid #691534;
         background:linear-gradient(to right,#ba023f,#ff537b);
@@ -338,7 +343,6 @@
         font-size: 16px;
         color: #fff;
         font-weight: 900;
-
         margin-top: 20px;
         width: 336px;
         height: 42px;

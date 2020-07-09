@@ -3,9 +3,9 @@
    
           <el-carousel :interval="5000" height='399px' arrow="always" indicator-position="none">
             <el-carousel-item v-for="item in imgList" :key="item.id" style="background:#000">
-                
-                   <img  v-lazy="item.image" alt="">
-                
+                  <router-link :to='item.link'>
+                     <img  v-lazy="item.image" alt="">
+                  </router-link>
             </el-carousel-item>
         </el-carousel>
 

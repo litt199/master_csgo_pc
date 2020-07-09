@@ -33,7 +33,7 @@
              <div class="Double_box">
                <div class="Double_box1"   v-for="(item,index) in fir" :key="index"  @click="Rollmessage(item.id)">
                      <doubleBox 
-                      class="doube_box"
+                      :class="item.status === true?'doube_box':'doube_box doube_box1'"
                       :titleTop="item.title+item.desc"
                       :time="item.endTime"
                       :num="item.count"
@@ -100,7 +100,7 @@ export default {
     },
   data() {
     return {
-       imgbg:this.$store.state.neiimg[1].image,
+       imgbg:this.$store.getters.neiimg2.image,
        newsList: [{
          "content":1234
        },
@@ -159,7 +159,6 @@ export default {
         this.current=1;
         this.total=res.total;
         this.fir = res.data;
-        // console.log(res)
       }
     })
   },
@@ -297,6 +296,13 @@ export default {
   flex-wrap: wrap;
   position: relative;
   /* padding-left: 20px; */
+}
+.doube_box1{
+  filter: grayscale(100%);
+  -webkit-filter: grayscale(100%);
+  -moz-filter: grayscale(100%);
+  -ms-filter: grayscale(100%);
+  -o-filter: grayscale(100%);
 }
 .doube_box{
   margin-right: 13px;

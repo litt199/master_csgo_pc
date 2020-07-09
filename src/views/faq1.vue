@@ -39,11 +39,11 @@
                </div>
                <div  class="title123">
                    <p>欢迎来到OBCASE！</p>
-                   <p>OBCASE是一家游戏饰品开箱品台，平台隶属于蜀冈—瘦西湖风景名胜区博电电子商务中心，主要从事STEAM平台的虚拟增值业务。</p>
+                   <p>蜀冈—瘦西湖风景名胜区博电电子商务中心旗下运营产品OBCASE是一家游戏饰品开箱平台，平台主要从事STEAM平台的虚拟增值业务。</p>
                    <p><span>OBCASE是工作室运营项目之一。OBCASE致力于为用户打造纯粹、便捷的饰品娱乐。OBCASE有权处理任何违规的操作，例如插件、爬虫、恶意注册等相关行为，网站将采取封禁操作。</span></p>                   
                    <p class="mingc">公司名称：<span>蜀冈—瘦西湖风景名胜区博电电子商务中心</span></p>
                    <p>公司地址：<span>扬州市蜀冈—瘦西湖风景名胜区老虎山路5-7号19</span></p>
-                   <p>公司邮箱：<span>obcase@163.com</span></p>
+                   <p>公司邮箱：<span>support@obcase.com</span></p>
                </div>
             </div>
       </div>    
@@ -67,7 +67,7 @@ export default {
   },
   data() {
     return {
-      imgbg:this.$store.state.neiimg[1].image,
+      imgbg:this.$store.getters.neiimg3.image,
         knowimg:true,
         img:'',
         fir:[

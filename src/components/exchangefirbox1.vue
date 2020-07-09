@@ -297,7 +297,7 @@ export default {
 }
 .publci_img{
     width: 102px;
-    height: 94px;
+    /*height: 94px;*/
 
    position: relative;
 }

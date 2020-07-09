@@ -90,7 +90,7 @@ export default {
   },
   data() {
     return {
-        imgbg:this.$store.state.neiimg[1].image,
+       
         faqTrue:false,
         knowimg:true,
         question:[
@@ -228,10 +228,11 @@ export default {
           
         ],
   
-     
+      imgbg:this.$store.getters.neiimg3.image,
     }
   },
   mounted(){
+
       var q = this.$route.query.id;
   
       if(q==1){
@@ -240,12 +241,7 @@ export default {
 
   },
   beforeCreate(){
-    let count = 0;
-    var imgs =  require('../assets/ROLL/1.png')
-    
-    let image = new Image();
-    image.src = imgs;
-    this.img = image;
+  
   },
   methods:{
       know(){

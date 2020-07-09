@@ -79,6 +79,7 @@ export default {
         sss:2,
         seison:'立即购买',
         price:'#34.99',
+        
         probability:parseFloat(this.priceFir.toFixed(2)),
         locationClass:[
             ["color_xian1","color_xian1 active"],
@@ -288,7 +289,7 @@ export default {
 }
 .publci_img{
     width: 102px;
-    height: 94px;
+    /*height: 94px;*/
     margin-left: 12px;
    position: relative;
 }

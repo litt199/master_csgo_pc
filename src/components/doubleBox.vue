@@ -21,7 +21,7 @@
                 <div class="text_right clear_skew">等<span>{{num}}</span>件奖品</div>
         </div>
       </div>
-    <div class="mouse_enter" v-show="mouseenter1">
+    <div class="mouse_enter" v-show="mouseenter1" v-cursor>
         <p>点击详情</p>
     </div>
 
@@ -58,7 +58,7 @@ export default {
       fir:{
           type:String,
           default:require('../assets/ROLL/11.png')
-        //   default:require('../assets/ROLL/6.png')
+        //default:require('../assets/ROLL/6.png')
       },
       text_left:{
           type:String,
@@ -116,7 +116,6 @@ export default {
         top: 0;
         z-index: 2;
         display: flex;
-        align-items: center;
         justify-content:center;
         flex-direction: column;
     }
@@ -163,18 +162,18 @@ export default {
         color:#fff;
         position: absolute;
         bottom: 10px;
-        left: 24px;
-     
+        left: 21px;
+        height: 38px;
     }
     .textdsd{
-        /*text-overflow: ellipsis;
+        text-overflow: ellipsis;
         display: -webkit-box;
         -webkit-line-clamp: 1;
         -webkit-box-orient: vertical;
-        overflow: hidden;*/
-        width: 100%;
+        overflow: hidden;
+        width: 190px;
         position: relative;
-        z-index: 10000;
+        z-index: 2;
     }
     .text_right{
         position: absolute;
@@ -203,31 +202,26 @@ export default {
         height: 160px;
         position: absolute;
         top: 12px;
-        right: 16px;
+        right: 20px;
     }
     .firimg1{
         width: 118px;
         position: absolute;
         top: 62px;
         right: 59px;
-        z-index: 100;
+        z-index: 1;
     }
         .mouse_enter{
       width: 430px;
       height: 160px;
       box-sizing: border-box;
-      border: 2px solid #e41063;
+      border: none;
       border-bottom: none;
-      border-image: -webkit-linear-gradient(bottom,rgba(0,0,0,0) ,#ec1807) 15 15;
-      border-image: -moz-linear-gradient(bottom,rgba(0,0,0,0) ,#ec1807) 15 15;
-      border-image: -ms-linear-gradient(bottom,rgba(0,0,0,0) ,#ec1807) 15 15;
-      border-image: -o-linear-gradient(bottom,rgba(0,0,0,0) ,#ec1807) 15 15;
-      border-image: linear-gradient(bottom,rgba(0,0,0,0),#ec1807) 15 15;
-      background: -webkit-linear-gradient(bottom,#843a1a 0%,rgba(0,0,0,0) 50%);
-      background: -moz-linear-gradient(bottom,#843a1a 0%,rgba(0,0,0,0) 50%);
-      background: -ms-linear-gradient(bottom,#843a1a 0%,rgba(0,0,0,0) 50%);
-      background: -o-linear-gradient(bottom,#843a1a 0%,rgba(0,0,0,0) 50%);
-      background: linear-gradient(bottom,#843a1a 0%,rgba(0,0,0,0) 50%);
+      background: -webkit-linear-gradient(bottom,#843a1a 10%,rgba(0,0,0,0) 65%);
+      background: -moz-linear-gradient(bottom,#843a1a 10%,rgba(0,0,0,0) 65%);
+      background: -ms-linear-gradient(bottom,#843a1a 10%,rgba(0,0,0,0) 65%);
+      background: -o-linear-gradient(bottom,#843a1a 10%,rgba(0,0,0,0) 65%);
+      background: linear-gradient(bottom,#843a1a 10%,rgba(0,0,0,0) 65%);
       position: absolute;
       top: 14px;
       left: 16px;
@@ -236,9 +230,10 @@ export default {
     .mouse_enter p{
       width: 430px;
       position: absolute;
-      bottom: 22px;
+      bottom: 19px;
       text-align: center;
       color: #fff;
+      font-size: 18px;
     }
 </style>
 

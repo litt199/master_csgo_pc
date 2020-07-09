@@ -2,7 +2,7 @@
   <div class="csgo">
 
        <div class="bg">
-            <img  :src="imgbg" alt="">
+            <img  :src="imgbg" alt="" @click="myyouhuiquan3">
         </div>
         <!-- <div class="ROLLfuli">
             个人中心
@@ -112,7 +112,7 @@
                         </div>
                         <div class="all_button" @click="selectChangeAll" v-cursor  v-show="!youhuiquanstate">
                             <div class="ling"></div>
-                            <div class="all">{{itemall}}</div>
+                            <div class="all1">{{itemall}}</div>
                             <div class="disnone"  v-show="disnone">
                                 <div v-for="(item,index) in changeAll" @click="handleItemall(index)" :key='item'>{{item}}</div>
                             </div>
@@ -193,7 +193,6 @@
                     :page-size='pageLength'
                     @current-change='handleChangefenye'
                     :total="total"
-                
                 ></el-pagination>
           </div>
       </div>
@@ -236,7 +235,9 @@ const publicBoxLeft  = ()=> import ("../components/publicBoxLeft");  //异步加
 const publicDobleColor1 = ()=>import ('../components/publicDobleColor1');
 const linxingBox =()=>import('../components/lingxingBox')
 import xuanzhuan1 from '../views/xuanzhuan1';
-import youhuiquan from '../components/youhuiquan'
+
+const youhuiquan =()=>import('../components/youhuiquan')
+
 import {
     GetPeople,
     GetProplePrice,
@@ -270,7 +271,7 @@ export default {
  
   data() {
     return {
-      imgbg:this.$store.state.neiimg[1].image,
+      imgbg:this.$store.getters.neiimg4.image,
       avatar:require('../assets/avatar/logo_icon.png'),//头像
         youhuiquanShow:true,
         fyouhuistate:0,  //判断是否使用了优惠券
@@ -295,17 +296,15 @@ export default {
         change:[
             '全部',
             '印花及武器箱',
-            '铭牌',
-            '贴纸',
-            '刀',
-            '音乐盒',
+            '匕首',
             '手枪',
             '步枪',
-            '散弹枪',
             '冲锋枪',
-            '机枪',
+            '微型冲锋枪',
+            '重型武器',
             '手套',
             '探员',
+            '其他',
         ],
         changeAll:[
             '全部',
@@ -381,40 +380,43 @@ export default {
   created(){
       var that=this;
       Bus.$on('fourceMycenter',data=>{   //事件总线，为了刷新当前页面
-          if(data===1){ 
+          if(data==1){ 
             that.MycenterGetProplePrice();  //获取钱包
              const params={
                 'pageNum':this.pageNum,
                 'pageSize':this.pageLength
             }
             that.MycenterGetPeople(params);
-            
           }
       })
       Bus.$on('shuaxin',data=>{   //事件总线，为了刷新当前页面
-          if(data===1){
-              Object.assign(that.$data, that.$options.data())   //合并对象
+          if(data==1){
+            //   console.log(data)
+            //   location.reload()//刷新
+             that.MycenterGetProplePrice();  //获取钱包
+            //   Object.assign(that.$data, that.$options.data().call(that))   //合并对象
           }
       })
 
   },
-  beforeDestroy(){
-      Bus.$delete('fourceMycenter');
+  destroyed(){
+      Bus.$off('fourceMycenter');
   },
+
   mounted(){
+      
       const params={
           'pageNum':this.pageNum,
           'pageSize':this.pageLength
       }
      this.MycenterGetPeople(params);
      this.MycenterGetProplePrice();
-    this.gitCoundList();
+    // this.gitCoundList();
   },
   methods:{
       //变化分页e
       handleChangefenye(e){
           if(this.youhuiquanstate){
-
             this.youPageNum=e;
             this.gitCoundList()
           }else{
@@ -445,10 +447,19 @@ export default {
        
       },
 
-
+      //banner显示我的优惠券
+      myyouhuiquan3(){
+          this.youhuiquanstate=true;
+          this.mybackpack='我的优惠券';
+          this.pageLength=8;
+          this.gitCoundList();
+      },
       //打开优惠券
       myyouhuiquan(){
+        //   console.log(this.youhuiquanstate);
           this.youhuiquanstate=!this.youhuiquanstate;
+        //   console.log(this.youhuiquanstate);
+
           this.mybackpack='我的优惠券';
           this.pageLength=8;
           this.gitCoundList();
@@ -498,10 +509,8 @@ export default {
                 if(res!=undefined){
                     let list = res.data.list
                     this.coundList=list;
-            
-     
                     this.total=res.data.total;
-          
+                    // console.log("--------------优惠券total:" + this.total);
                     this.changeDate(list);
                 }
           })
@@ -627,10 +636,11 @@ export default {
                 })
               
               }else{
+                this.total=res.total;
                 var dataList=res.data;
                 var datafunList = this.dataList(dataList)
                 this.list=datafunList;
-                this.total=res.total;
+                
               }
             }
         })
@@ -654,7 +664,7 @@ export default {
             if(res!=undefined){
                 // console.log(res)
                 that.list = res.data;
-                this.total=res.total;
+                that.total=res.total;
             }
           })
 
@@ -758,7 +768,7 @@ export default {
         GetProplePrice().then((res)=>{
                 if(res!=undefined){
                     this.message=res.data;
-                 
+                    
                     if(res.data.transactionUrl==null){
                             this.transactionUrl='请更换交易链接'
                     }else{
@@ -772,11 +782,12 @@ export default {
      MycenterGetPeople(params){
         GetPeople(params).then((res)=>{
             if(res!=undefined){
+                this.total=res.total;
                 var dataList=res.data;
                 var datafunList = this.dataList(dataList)
                 this.list=datafunList;
-        
-                this.total=res.total;
+                // console.log("-----------------我的背包total:" + this.total)
+                // console.log(res);
                 this.current=1;
             }
         })
@@ -995,15 +1006,19 @@ export default {
 }
 .all{
     position: relative;
-    padding-left: 10px;
-    padding-right: 10px;
     background: #631936;
+    width: 92px;
     /* transform: skewX(-15deg); */
 
     /* -webkit-transform: skewX(-15deg);
     -moz-transform: skewX(-15deg);
     -ms-transform: skewX(-15deg);
     -o-transform: skewX(-15deg); */
+}
+.all1{
+    position: relative;
+    background: #631936;
+    width: 72px;
 }
 .Double_box{
   display: flex;
@@ -1040,7 +1055,7 @@ export default {
 }
 .hengxian{
     margin-left: 8px;
-    width: 464px;
+    width: 430px;
     margin-top: 16px;
 }
 .box{
@@ -1324,7 +1339,7 @@ export default {
   top: 0;
 }
 .box_right .steam_box_tip{
-    width: 814px;
+    width: 858px;
     height: 50px;
     position: absolute;
     top: 167px;
@@ -1332,7 +1347,7 @@ export default {
     z-index: 51;
 }
 .box_right .steam_box_tip input{
-    width: 658px;
+    width: 760px;
     height: 43px;
     line-height: 43px;
     position: absolute;
@@ -1355,9 +1370,10 @@ export default {
     color: #fff;
 }
 .box_right .steam_box_tip img:nth-child(1){
-    width: 714px;
+    width: 760px;
     position: absolute;
     top: 0;
+    height: 43px;
 }
 .box_right .steam_box_tip img:nth-child(2){
     width: 89px;

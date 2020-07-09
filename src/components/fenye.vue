@@ -54,7 +54,7 @@
           return list;
         }
         var count = Math.floor(this.pagegroup / 2);//5
-        console.log('123')
+        // console.log('123')
         var center = this.currentPage;
         if (len <= this.pagegroup) {// 判断当总页数<=分页数的情况
           while (len--) {

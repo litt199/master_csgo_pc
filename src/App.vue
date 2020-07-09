@@ -2,7 +2,7 @@
   <div id="app">
     <!-- <Header></Header> -->
     <headerNew></headerNew>
-     <router-view></router-view>
+    <router-view></router-view>
     <Floot></Floot>
     <service></service>
     <recharge v-if="recharge"  @next="handleClickNext" @changeExit="handleBack_bg"></recharge>
@@ -23,10 +23,8 @@
     ></reQRCode>
   </div>
 </template>
-
-
 <script>
-import {getMessage,getBanner} from './axios/Apilogin'
+import {getMessage,getBanner,GetProplePrice} from './axios/Apilogin'
   import Bus from './axios/Bus'
   // const Index =()=>import('./views/index')
   const headerNew =()=>import ('./components/HeaderNew')
@@ -49,7 +47,7 @@ import {getMessage,getBanner} from './axios/Apilogin'
         reQRCode,
         // Header,
         service
-       
+
     },
     data() {
       return {
@@ -63,24 +61,38 @@ import {getMessage,getBanner} from './axios/Apilogin'
     },
     created() {
       var _this=this;
-       Bus.$on('yao',data=>{   //事件总线，为了刷新当前页面
+      Bus.$on('yao',data=>{   //事件总线，为了刷新当前页面
           if(data===1){
               _this.recharge=true
           }
       })
 
-
+      const pos= {
+      "pos":"bar"
+    }
+     getBanner(pos).then((res)=>{
+        // console.log(res.data)
+          if(res.data!=""){
+              localStorage.setItem('imgbgnei',JSON.stringify(res.data))
+              // if(res.data[0]!=undefined){
+              //  this.$store.state.neiimg0=res.data[0]  
+              // }
+              //  if(res.data[1]!=undefined){
+              //  this.$store.state.neiimg1=res.data[1]  
+              // } if(res.data[2]!=undefined){
+              //  this.$store.state.neiimg2=res.data[2]  
+              // } if(res.data[3]!=undefined){
+              //  this.$store.state.neiimg3=res.data[3]  
+              // } if(res.data[4]!=undefined){
+              //  this.$store.state.neiimg4=res.data[4]  
+              // }
+          }
+  
+      // localStorage.removeItem('imgbgnei')
+    })
    
 
-      const pos= {
-        "pos":"bar"
-      }
-       getBanner(pos).then((res)=>{
-        //  console.log(res)
-        if(res!=undefined){
-          this.$store.commit('getNei',res.data)
-        }
-      })
+
     },
     beforeDestroy(){
       clearInterval(this.timer)
@@ -89,10 +101,11 @@ import {getMessage,getBanner} from './axios/Apilogin'
       var that=this;
        getMessage().then((res)=>{   //通知
         if(res!=undefined){
-         
           localStorage.setItem('mes',JSON.stringify(res.data))
-        }
+          this.$store.state.newsList=JSON.parse(localStorage.getItem('mes'))
+         }
        })
+  
     },
     watch: {
       '$route':'getPath',
@@ -124,7 +137,7 @@ import {getMessage,getBanner} from './axios/Apilogin'
          this.recharge=false;
           this.rechargeMoney=false;
           this.reQRCode = true;
-          console.log(data)
+      
           this.price=data.price;
           this.payment=data.payment;
       },
@@ -142,6 +155,7 @@ import {getMessage,getBanner} from './axios/Apilogin'
 </script>
 
 <style>
+
  .dicent_text {
         overflow: hidden;
         height: 19px;

@@ -22,17 +22,17 @@
             <p>{{firstate}}</p>
         </div>
 
-        <div class="title" v-show="isShowTitle">
+        <!--<div class="title" v-show="isShowTitle">
             <p>预计1-8日取回到货</p>
-        </div>
+        </div>-->
 
-<!-- 下面回收 -->
-        <div class="shoujia" v-show="isShowTitle">
+        <!-- 下面回收 -->
+        <div class="shoujia1" v-show="isShowTitle">
             <span>${{price}}</span>
         </div>
-        <div class="name" v-show="isShowTitle">
+        <!--<div class="name" v-show="isShowTitle">
             系统回收价
-        </div>
+        </div>-->
 
         <div class="login_input login_input1"  v-if="text_state" @click="shouClick">
             <div class="linxing1"></div>
@@ -72,8 +72,7 @@ export default {
           default:'迈阿密风云'
       },
       price:{
-  
-        default:'10000'  
+        default:'0.0'  
       },
       type:{
           default:'运动手套（★）'
@@ -161,7 +160,7 @@ export default {
 <style scoped>
    .recharge{
         position: fixed;
-        top: 50%;
+        top: 54%;
         left: 50%;
         width: 493px;
         height: 562px;
@@ -344,6 +343,14 @@ export default {
         bottom: 190px;
          font-size: 16px;
     }
+    .shoujia1{
+
+        color: #fff;
+        font-size: 14px;
+        position: absolute;
+        bottom: 140px;
+         font-size: 20px;
+    }
    .shoujia span{
        color: #e60f64;
        font-weight: bold;
@@ -354,7 +361,7 @@ export default {
         color: #fff;
         position: absolute;
         bottom: 170px;
-          font-size: 16px;
+        font-size: 16px;
     }
    .exit{
        position: absolute;

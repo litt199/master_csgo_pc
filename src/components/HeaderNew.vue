@@ -38,7 +38,8 @@
                             <p>充值</p>
                         </div> -->
                     </div>
-                    <img :src="avatar" class="touxiang" alt="" @click="TmyCenter">
+                    
+                    <img :src="message.avatar==null?avatar:message.avatar" class="touxiang" alt="" @click="TmyCenter">
                 </div>
                 <!-- 退出 -->
            </div>
@@ -123,6 +124,22 @@ export default {
             // },
             {
                 id:1,
+                title:"首页",
+                title_t:"HOME PAGE",
+                path:'/',
+                img1:require('../assets/header/topBar/7.png'),
+                img2:require('../assets/header/topBar/7-1.png'),
+            },
+            {
+                id:2,
+                title:"CSGO开箱",
+                title_t:"CSGO BOXES",
+                path:'/public_box_home/csgo',
+                 img1:require('../assets/header/topBar/5-1.png'),
+                img2:require('../assets/header/topBar/5.png'),
+            },
+            {
+                id:3,
                 title:"兑换商城",
                 title_t:"EXCHANGE MALL",
                 path:'/public_box_home/exchangeMall',
@@ -130,7 +147,7 @@ export default {
                 img2:require('../assets/header/topBar/1-1.png'),
             },
             {
-                id:2,
+                id:4,
                 title:"ROLL福利",
                 title_t:"ROLL WELFARE",
                 path:'/public_box_home/Roll',
@@ -139,21 +156,14 @@ export default {
             },
           
             {
-                id:3,
-                title:"CSGO开箱",
-                title_t:"STAR MEMBER",
-                path:'/public_box_home/csgo',
-                 img1:require('../assets/header/topBar/5-1.png'),
-                img2:require('../assets/header/topBar/5.png'),
-            },
-            {
-                id:4,
+                id:5,
                 title:"常见问题",
                 title_t:"QUESTIONS",
                 path:'/public_box_home/faq',
                  img1:require('../assets/header/topBar/6-1.png'),
                 img2:require('../assets/header/topBar/6.png'),
             },
+            
             // {
             //     id:6,
             //     title:"个人中心",
@@ -188,10 +198,11 @@ export default {
         
     },
     Bus.$on('MoreLogin',content=>{
-    
+        // console.log(_this.stateRegister);
         if(content==1){
             _this.stateRegister=true;
             _this.loginTu=true;
+            // console.log(_this.stateRegister);
         }
     })
     Bus.$on("currentPath",data=>{
@@ -199,10 +210,10 @@ export default {
             _this.id=-1
         }
         if(data=="/public_box_home/openBox"){
-            _this.id=3;
+            _this.id=1;
         }
         if(data=="/public_box_home/ROLLactivelyDetail"){
-            _this.id=2
+            _this.id=3
         }
         this.list.forEach(function (value) {
             if(data==value.path){
@@ -210,12 +221,14 @@ export default {
             }
         })
     })
-    Bus.$on("moneySell",data=>{
+    Bus.$on("moneySell",data=>{   //获取金额
         // console.log('触发')
         if(data==1){
+            // console.log('获取金额')
             this.getMoney();
         }
     })
+
 },
 
   mounted(){
@@ -237,14 +250,6 @@ export default {
             this.loginTu=true;
 
         }
-    var avatar = localStorage.getItem('avatar');
-
-    if(avatar=="null"){
-      
-    }else{
- 
-        this.avatar=avatar
-    }
   },
   methods:{
       investFun(){
@@ -256,9 +261,6 @@ export default {
           this.xiugai=false;
           this.stateRegister=true
       },
-
-
-
       //出现修改密码窗口
       tiaozhuanxiugai(data){
           this.chuanphone=data.phone;
@@ -397,6 +399,7 @@ export default {
              GetProplePrice().then((res)=>{
                  if(res!=undefined){
                         this.mmoney=res.data.money;
+                        // console.log(this.mmoney)
                         this.nickName=res.data.nickName;
                         if(res.data.avatar!=null){
                             this.avatar=res.data.avatar;
@@ -404,7 +407,6 @@ export default {
                         localStorage.setItem('avatar',res.data.avatar)
                         localStorage.setItem('message',res.data.money)
                         localStorage.setItem('name',res.data.nickName)
-                        // console.log("-------------res.data");
                         // console.log(res.data);
                  }
             })
@@ -474,7 +476,7 @@ export default {
     .page_right{
         display:flex;
         align-items: center;
-        margin-left:85px;
+        margin-left:21px;
     }
     .page_title{
         display: flex;

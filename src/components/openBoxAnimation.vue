@@ -2,7 +2,7 @@
 <div>
 
 
-  <div class="openBoxAinmation">
+  <div class="openBoxAinmation" >
       <!-- <div @click="openBoxJisuan" class="open" v-cursor>open</div> -->
       <!-- <div class="content"> -->
         <img class="animation_bg" src="../assets/openBox/oneOpenBox/6.png" alt="">
@@ -68,10 +68,12 @@ import Bus from '../axios/Bus'
 export default {
   name: '',
   components: {
- 
+  
   },
   data() {
     return {
+      timerMi:"",
+      switchRuning:false,
       message:'', //储存箱子的信息
       imgbg1:require('../assets/openBox/oneOpenBox/7.png'),
       imgbg2:require('../assets/openBox/oneOpenBox/7.png'),
@@ -105,10 +107,10 @@ export default {
         message.name=res.data[0].box.name;
         message.number=res.data[0].goodsList.length;
         this.message=message;
-
-        this.text_list[0].ti='开1次$'+res.data[0].box.price
-        this.text_list[2].ti='开5次$'+res.data[0].box.price*5
-        
+        var onePrice=res.data[0].box.price
+        this.text_list[0].ti='开1次$'+onePrice.toFixed(2)
+        var fivePrice=res.data[0].box.price*5;
+        this.text_list[2].ti='开5次$'+fivePrice.toFixed(2)
          var bigArray = Array(80);
         var smallArray = res.data[0].goodsList;
         var xunhuanBigArray=this.HpArray(smallArray,bigArray);
@@ -122,13 +124,29 @@ export default {
       }
     })
   },
+  destroyed(){
+    this.timerMi='';
+    //删除开箱事件
+    Bus.$off('changeTimer')
+  },
+   created(){
+      var that=this;
+    Bus.$on('changeTimer',content=>{   //监听重新开箱事件
+        // console.log(_this.stateRegister);
+        if(content==1){
+            that.timer=false
+        }
+    })
+  },
   methods:{
+ 
       //点击小图切换开几次
       handleidsIndex(e){
-      
+    
         if(e===0){
             this.idsindex=e;
             this.openBoxJisuan();
+           
         }else if(e===1){
             this.idsindex=e;
           if(this.timer){
@@ -210,10 +228,38 @@ export default {
     },
 
 
+
+  //封装一个函数，来控制什么时候来打开音频
+  //传入的是一个数值，是确定0-158之间的值
+     controlAudio(times){
+        if(times<40){
+            // console.log(0)
+            this.$emit('playAudio','https://obcase.oss-cn-shanghai.aliyuncs.com/res/media/oc-sound-bg-op-10.mp3')
+        }else if(times<80&&times>39){
+            // console.log(1)
+            this.$emit('playAudio', "https://obcase.oss-cn-shanghai.aliyuncs.com/res/media/oc-sound-bg-op-11.mp3")
+        }else if(times<111&&times>79){
+            // console.log(2)
+            this.$emit('playAudio',"https://obcase.oss-cn-shanghai.aliyuncs.com/res/media/oc-sound-bg-op-12.mp3")
+        }else if(times<130&&times>110){
+            // console.log(3)
+            this.$emit('playAudio',"https://obcase.oss-cn-shanghai.aliyuncs.com/res/media/oc-sound-bg-op-13.mp3")
+        }else if(times<143&&times>129){
+            // console.log(4)
+            this.$emit('playAudio', "https://obcase.oss-cn-shanghai.aliyuncs.com/res/media/oc-sound-bg-op-14.mp3")
+        }else if(times<159&&times>142){
+            // console.log(5)
+            this.$emit('playAudio', "https://obcase.oss-cn-shanghai.aliyuncs.com/res/media/oc-sound-bg-op-15.mp3")
+        }
+     },
+
+
+
+
       //测试点击按钮，跑动滚轮
       open(arr){
           var that=this;
-          that.timer=true;
+         
           var right = 0;  //起始滑动距离
           // this.render();   //添加滚动的内容，进入盒子  添加60个小方格
           // console.log(this.list[68])   //确定68是具体位置
@@ -227,15 +273,20 @@ export default {
           // console.log(q[0])
           suffleList[62]=q[0];
 
-  
+
 
           this.list = suffleList;
 
           //生成一个1-145的随机数，然后加上475，控制滚轮滑动的位置
-          var suiji = Math.floor(Math.random()*158)+1
-        
-           var timer = setInterval(function(){   //定时任务
+          var suiji = Math.floor(Math.random()*158)+1;
+          // var suiji = 0;
+          // var suiji = 158;
+          
+          this.controlAudio(suiji)  
 
+         
+           that.timerMi = setInterval(function(){   //定时任务
+              
               right+=speed  //开始后先移动50
               count++  //
               that.rgt=right+'px';
@@ -259,11 +310,14 @@ export default {
                   speed=2
               }
               if(count>=380){
+         
                   speed=1
               } if(count>=480+suiji){
+                  
 
-                  clearInterval(timer)
+                  clearInterval(that.timerMi)
                   that.timer=false;  //结束可以继续开箱
+                 
                   // rendertime++    //统计开箱几次
                   // $('#btn').css('display','block');
                   // var copy= $.clone($('.swiper-slide')[50])
@@ -281,22 +335,26 @@ export default {
 
     //封装轮播结束得到位置，并计算到哪里停止
     openBoxJisuan(){
+        
         if(this.timer){
             return
           }
+    
+        this.timer=true;
           // console.log(this.$route.query.id)
         const data={
           "openNum":1,
           "id":this.$route.query.id
         }
-        GetOpenBox(data).then((res)=>{
+        GetOpenBox(data).then((res)=>{  
             if(res!=undefined){
                 if(res.code==500){
                   Bus.$emit('yao',1)
                 }else if(res.code==0){
                   this.xxxx=res.data[0];
                   this.open(res.data[0])
-                  Bus.$emit('moneySell',1)  //重新刷新登上金额
+  
+                  Bus.$emit('moneySell',1)  //重新刷新顶上金额
                 }
             }
         })
@@ -434,7 +492,7 @@ export default {
   flex-direction: column;
   align-items: center;
   justify-content: center;
-  margin-bottom: 65px;
+  margin-bottom: 40px;
 }
 .bottom_box p{
   color: #fff;

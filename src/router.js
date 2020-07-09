@@ -1,10 +1,6 @@
 import Vue from 'vue'
 import Router from 'vue-router'
-import Home from './views/Home.vue'
-import Index from './views/index'
-import ROLLWelfare from './views/ROLLwelfare.vue'
-import csgoOpenBox from './views/csgoOpenBox'
-import myCenter from './views/myCenter'
+
 
 
 Vue.use(Router)
@@ -89,11 +85,18 @@ export default new Router({
       ]
     },
 
-    // {
-    //   path: '/dailyFree',
-    //   name: 'dailyFree',
-    //   component: () => import(/* webpackChunkName: "about" */ './views/dailyFree.vue')
-    // },
- 
-  ]
+    {
+      path: '/four',
+      name: '404',
+      component: () => import(/* webpackChunkName: "about" */ './views/404.vue')
+    },
+    {
+      path: '*', // 页面不存在的情况下会跳到404页面
+      redirect: '/four',
+      name: 'notFound',
+      hidden: true
+    }
+  ],
+  
 })
+

@@ -10,6 +10,7 @@ const instance = axios.create({   //5,创建axios的示例，并且赋值默认�
     // baseURL:process.env.NODE_ENV==="production"?'':'/api'
     // baseURL:"http://192.168.0.151:8001"       //设置默认的请求api 
     baseURL:"http://app.obcase.cn"       //设置默认的请求api 
+    // baseURL:"/api"       //设置默认的请求api 
 })
 
 instance.defaults.headers['Content-Type']='application/json'; //设置统一的header
@@ -77,7 +78,11 @@ instance.interceptors.response.use(response=>{
   
         localStorage.removeItem('message')
         localStorage.removeItem('name')
-     }
+     }else if(error.response.status==404||error.response.status==400){
+          router.push({
+            path:'/four'
+          })
+     }  
      else{
         Message({
             message:tips,

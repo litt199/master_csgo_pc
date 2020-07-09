@@ -156,6 +156,7 @@ export default {
             this.changeIndex=-1;
           }else{
             this.changeIndex=e;
+            this.shuruPrice=""
           }
           
       },
@@ -169,7 +170,7 @@ export default {
 <style scoped>
    .recharge{
         position: fixed;
-        top: 50%;
+        top: 54%;
         left: 50%;
         width: 490px;
         height: 677px;

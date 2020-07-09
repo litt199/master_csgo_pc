@@ -129,7 +129,7 @@ export default {
     /* height: 72px; */
     margin-left: 12px;
     position: absolute;
-    top: 44px;
+    top: 4px;
     left: 16px;
     z-index: 4;
 }
@@ -236,10 +236,10 @@ export default {
 }
 @keyframes topfly{
     from{
-        top: 44px;
+        top: 4px;
     }
     to{
-        top: 30px;
+        top: 15px;
     }
 }
 

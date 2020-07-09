@@ -25,6 +25,12 @@ router.beforeEach((to, from, next) => {
 })
 
 
+
+
+  
+
+
+
 //注册全局组件
 import publicBox from './components/treasureBox'
 Vue.use(publicBox)

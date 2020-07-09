@@ -29,7 +29,7 @@
           </div> -->
          
            <div class="box_right">
-               <div class="hengxian_box" v-for="(item,index) in list" :key="index">
+               <div class="hengxian_box" v-for="(item,index1) in list" :key="index1">
                     <div class="right_top_heng">
                         <img src="../assets/csgo/1.png" alt="">
                         <p>{{item.groupName}}</p>
@@ -37,7 +37,7 @@
                         <img class="triangle" src="../assets/csgo/3.png" alt="">
                     </div>
                     <div class="Double_box">
-                        <div v-for="(item1,index) in item.goodsInfo"  :key='index' @click="boxClick(index)">
+                        <div v-for="(item1,index) in item.goodsInfo"  :key='index' @click="boxClick(index1,index)">
                             <indexPublicBox
                                     @enter="mouseent"
                                     @leave='mouseleave'
@@ -76,13 +76,12 @@ export default {
   },
   data() {
     return {
-      imgbg:this.$store.state.neiimg[0].image,
+      imgbg:this.$store.getters.neiimg0.image,
       knowimg:true,
-        list:[
-          {}
-        ],
-        imgUrl:this.$store.state.imgUrl
-
+      list:[
+        {}
+      ],
+      imgUrl:this.$store.state.imgUrl,
     }
   },
      computed: {
@@ -96,12 +95,14 @@ export default {
       }
     },
   mounted(){
+ 
+    
     getCsgoBox().then((res)=>{
       if(res!=undefined){
         this.list=res.data;
+        // console.log("-------------开箱页面");
+        // console.log(res.data);
       }
-        
-
     })
   },
   methods:{
@@ -111,8 +112,8 @@ export default {
       mouseleave(e){
         //   console.log(e)
       },
-      boxClick(index){
-          this.$router.push({path: '/public_box_home/openBox?id=' + this.list[0].goodsInfo[index].id});
+      boxClick(index1,index){
+          this.$router.push({path: '/public_box_home/openBox?id=' + this.list[index1].goodsInfo[index].id});
       },
       //隐藏小喇叭
       know(){

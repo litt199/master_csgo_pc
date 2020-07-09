@@ -118,7 +118,7 @@ export default {
   },
   data() {
     return {
-        imgbg:this.$store.state.neiimg[1].image,
+        imgbg:this.$store.getters.neiimg4.image,
         isJoin:false,
         winning:3,
         knowimg:true,

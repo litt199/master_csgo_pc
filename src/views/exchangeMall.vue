@@ -78,7 +78,6 @@
                         </div>
                   
                     </div>
-
                     <!-- 分页 -->
                     <!-- <fenye :total="total" :currentPage='current'  :pageLength="pageLength" @pagechange="pagechange"></fenye> -->
                      <el-pagination
@@ -151,7 +150,7 @@ export default {
        {
          "content":1234
        }],
-      imgbg:this.$store.state.neiimg[0].image,
+      imgbg:this.$store.getters.neiimg1.image,
         duihuanBtn:"确认兑换",
         total: 1,     //记录总条数
         pageLength: 30,//每页显示条数
@@ -174,56 +173,44 @@ export default {
         fenlei:[
             {
                 "id":1,
-                "name":"印花"
+                "name":"印花及武器箱"
             },
             {
                 "id":2,
-                "name":"钥匙"
+                "name":"匕首"
             },
             {
                 "id":3,
-                "name":"铭牌"
-            },
-            {
-                "id":4,
-                "name":"贴纸"
-            },
-            {
-                "id":5,
-                "name":"刀"
-            },
-            {
-                "id":6,
-                "name":"音乐盒"
-            },
-            {
-                "id":7,
                 "name":"手枪"
             },
             {
-                "id":8,
+                "id":4,
                 "name":"步枪"
             },
             {
-                "id":9,
-                "name":"散弹枪"
+                "id":5,
+                "name":"冲锋枪"
             },
             {
-                "id":10,
-                "name":"机枪"
+                "id":6,
+                "name":"微型冲锋枪"
             },
             {
-                "id":11,
+                "id":7,
+                "name":"重型武器"
+            },
+            {
+                "id":8,
                 "name":"手套"
             },
             {
-                "id":12,
+                "id":9,
                 "name":"探员"
             },
             {
-                "id":13,
-                "name":"冲锋枪"
-            }
+                "id":10,
+                "name":"其他"
+            },
     ],
         list:[]
     }
@@ -509,7 +496,7 @@ export default {
  
 }
 .all_button{
-  width: 60px;
+  /*width: 60px;*/
   height: 24px;
   position: relative;
   top: 0;
@@ -517,7 +504,7 @@ export default {
   line-height: 23px;
   color: #fff;
   margin-right: 5px;
-  font-style: italic;
+  /*font-style: italic;*/
    /* position: relative; */
 }
 .all_button.price_change{
@@ -628,7 +615,7 @@ export default {
   z-index: 50;
 }
 .optionTip{
-    width:58px;
+    /*width:58px;*/
     z-index: 10000;
     position: relative;
     background: #fff;
@@ -638,22 +625,22 @@ export default {
     top: 2px;
     background: url("../assets/exchangeMall/xiala.png");
     background-size: 100% 100%;
+    padding: 0 10px;
 }
 .optionTip div{
-    width: 58px;
+    /*width: 58px;*/
     height: 20px;
     line-height: 18px;
-    text-overflow: ellipsis;
+    /*text-overflow: ellipsis;
     overflow: hidden;
-    white-space: nowrap;
+    white-space: nowrap;*/
 }
 .allName{
     position: relative;
-    padding-left: 2px;
-    padding-right: 2px;
     height: 20px;
     line-height: 20px;
     background: #631936;
+    width: 92px;
 }
 .all_change{
   width: 100px;

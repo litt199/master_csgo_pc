@@ -138,7 +138,7 @@ export default {
   },
   data() {
     return {
-      imgbg:this.$store.state.neiimg[1].image,
+      imgbg:this.$store.getters.neiimg0.image,
         header:require('../assets/myCenter/3.png'),
         price:0,
         numbers:0,

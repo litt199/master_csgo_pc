@@ -65,7 +65,8 @@ export default {
     },
   methods:{
       exit(){  //点击叉，不显示登陆页面
-          this.$emit('changeExit')  
+          this.$emit('changeExit')
+          Bus.$emit('changeTimer',1)  
       },
     
       clear(){   //清楚输入框内容
@@ -116,6 +117,7 @@ export default {
                         })
                     }else if(res.code===0){
                         this.$emit('changeState',2)
+                        Bus.$emit('changeTimer',1)
                             localStorage.setItem('token',res.data.token)  //储存本地的token
                             Message({
                                 duration:2000,                              //element-ui中的展示请求错误的信息+ 

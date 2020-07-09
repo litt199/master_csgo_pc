@@ -1,6 +1,7 @@
 <template>
   <div class="csgo">
-    
+    <audio ref="audios" :src="audiosrc"></audio>
+
        <div class="bg">
             <!-- <img  src="../assets/ROLL/1.png" alt=""> -->
             <img  :src="imgbg" alt="">
@@ -21,6 +22,7 @@
                   </li>
               </ul>
             </vue-seamless-scroll>
+            <div class="closeMusic" v-cursor @click="closeMusic">{{datacloseMusicMessage}}</div>
           <div class="know" v-cursor @click="know">知道了</div>
           <!-- <img src="../assets/ROLL/9.png" class="know" @click="know" alt=""> -->
         </div>
@@ -36,9 +38,10 @@
                         <img src="../assets/openBox/5.png" alt="">
                         <div class="text">开 <span> 1 </span>次 <span>${{item.price}}</span></div>
                     </div>
-                    <div class="open_center">
+                    <div class="open_center" @mouseenter="goodsenter" @mouseleave="goodsleave">
                     
                         <div class="firearms">
+                            <img :class="[sss==1?'active goodsImage':'goodsImage']" :src="item.goodsImage" alt="">
                             <img :src="item.image" alt="">
                             <div class="dao_box">
                                 <!-- <p class="dao" v-show="openStatus">{{item.name}}</p>
@@ -57,7 +60,7 @@
 
 
                <!-- 打开一个箱子 -->
-               <openBoxAnimation @shuDingJp='shudingjiangping' v-show="openStatusOne" ref='chid' class="openoneBox"></openBoxAnimation>
+               <openBoxAnimation @shuDingJp='shudingjiangping' @playAudio='playaudio' v-show="openStatusOne" ref='chid' class="openoneBox"></openBoxAnimation>
 
 
                <!--五连开箱-->
@@ -156,6 +159,8 @@
 </template>
 
 <script>
+import { AudioPlayer } from '../components/packages'
+// import '@liripeng/vue-audio-player/lib/vue-audio-player.css'
 
 import Bus from '../axios/Bus'
 import fiveliankai from './fiveTanchuang'
@@ -185,7 +190,7 @@ export default {
       rechargeMoney,
       recharge,
       fiveliankai,
-   
+      AudioPlayer,
   },
    computed: {
       optionLeft () {
@@ -199,7 +204,12 @@ export default {
     },
   data() {
     return {
-      imgbg:this.$store.state.neiimg[1].image,
+        datacloseMusicMessage:"关闭音乐",
+        datacloseMusic:true,
+        audiosrc:"https://obcase.oss-cn-shanghai.aliyuncs.com/res/media/sound-open-1.mp3",
+
+        sss:0,  //用来设置鼠标悬浮
+      imgbg:this.$store.getters.neiimg0.image,
 
         fivePrice:0,
         listNumbers:0,  //箱子里包含多少个长度
@@ -239,15 +249,17 @@ export default {
 
           },
         ],
+        audioState:0,
     }
   },
     mounted() {
+         this.$refs.audios.currentTime=0;   //这个设置是为了解决 它的组件库bug的。
         const params = this.$route.query.id;//"032bc9ce719c4416a825b53fc42e900e";
         GetBasisBox(params).then((res)=>{
             // console.log(res)
             if(res!=undefined){
             this.box[0] = res.data[0].box;
-     
+            // console.log(res.data[0].box)
             this.boxStroge[0] = res.data[0].box;
             var listRes = res.data[0].goodsList;
             this.listNumbers = listRes.length;  //获取长度
@@ -299,12 +311,49 @@ export default {
 
     },
   methods:{
+      //关闭音乐
+      closeMusic(){
+          var that=this;
+           that.$refs.audios.muted=true;
+         this.datacloseMusic=!this.datacloseMusic;
+         if(this.datacloseMusic){
+             this.datacloseMusicMessage='关闭音乐';
+             that.$refs.audios.muted=false;
+         }else{
+             this.datacloseMusicMessage='开启音乐'
+         }
+      },
+
+
+  
+      //播放音频
+      playaudio(state){
+          
+               this.audiosrc=state;
+               this.$nextTick(()=>{
+               this.$refs.audios.currentTime=0;
+                this.$refs.audios.play()//音频播放
+            })
+        
+        return
+          
+           
+      },
+      goodsenter(){   //鼠标进入
+          this.sss=1;
+      },
+      goodsleave(){  //鼠标离开
+          this.sss=0;
+      },
+
     know(){
         this.knowimg=false
     },
 
       //打开开箱
       openBoxShow(){
+          
+        //   this.$refs.audios.play() //音频播放
           this.openStatusOnebox=false
           this.openStatusOne=true
           this.openBox()
@@ -389,9 +438,11 @@ export default {
         }
       },
       openBox(openNum){
+          var that=this;
           // console.log( this.openStatusFive);
         this.openStatusFive=false;
         if(this.openStatusOne==true){
+           
             this.$refs.chid.openBoxJisuan()
             
         }else{
@@ -537,7 +588,7 @@ export default {
 
 }
 .hengxian_box{
-    margin-bottom: 20px;
+    /*margin-bottom: 20px;*/
     margin-top: -15px;
 }
 .doube_box{
@@ -642,12 +693,31 @@ export default {
     color: #fff;
 }
 .firearms img{
-    width: 161px;
-    height: 129px;
+    width: 290px;
+    /* height: 129px; */
+    margin-top: 10px;
+}
+.firearms .goodsImage{
+    position: absolute;
+    left: 40px;
+    top: 33px;
+    width: 200px;
+}
+.goodsImage.active{
+    animation: topfly 0.8s linear infinite alternate;
+
+}
+@keyframes topfly{
+    from{
+        top: 33px;
+    }
+    to{
+        top: 20px;
+    }
 }
 .dao{
     font-size: 21px;
-    margin-top: 10px;
+   
     font-style: italic;
     font-weight: 900;
 }
@@ -751,12 +821,24 @@ export default {
     top: 0;
 }
 .exchangeBox{
-        margin-right: 13px;
+    margin-right: 13px;
     margin-bottom: 13px;
 }
 .el_paination{
     position: absolute;
-    top: 1130px;
+    top: 1250px;
     right: 100px;
+}
+.csgo .audio-player{
+    display: none;
+}
+.closeMusic{
+     position: absolute;
+    right: 133px;
+    top: 5px;
+    padding: 3px 6px;
+    border: 1px solid #3b3030;
+    border-radius: 5px;
+    color: #a38181;
 }
 </style>

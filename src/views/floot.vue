@@ -1,10 +1,12 @@
 <template>
   <div class="floot">
        <div class="floot_left">
-           <img src="../assets/floot/3.png" alt="">
+           <!-- <img src="../assets/floot/3.png" alt=""> -->
+           <img src="../assets/floot/title.png" alt="">
            <div class="title">
-               <img src="../assets/floot/title.png" alt="">
-                 <div class="dasdasd"> 版权所有 ©2010-2020 obcase 保留所有 <a target="_blank" href="http://www.beian.miit.gov.cn/">苏ICP备20032379号-1</a></div>
+               
+               <div class="email">邮箱: support@obcase.cn</div>
+                <div class="dasdasd"> 版权所有 ©2010-2020 obcase 保留所有 <a target="_blank" href="http://www.beian.miit.gov.cn/">苏ICP备20032379号-1</a></div>
            </div>
        </div>
        
@@ -111,10 +113,10 @@ export default {
         left: 186px;
     }
     .title{
-        display: flex;
+        /* display: flex; */
         margin-top: 13px;
-        display: flex;
-        align-items: center;
+        /* display: flex;
+        align-items: center; */
     }
     .title p{
         margin-right: 10px;
@@ -127,7 +129,7 @@ export default {
     }
     .img2{
         position: absolute;
-        left: -4px;
+        left: 0px;
     }
     .floot_right{
         position: absolute;
@@ -149,7 +151,20 @@ export default {
         top: 87px;
         left: 126px;
     }
+    .dasdasd{
+        /* position: absolute;
+        top: 92px;
+        left: 120px; */
+    }
     .dasdasd a{
+        color: #535252;
+    }
+    .email{
+        /* position: absolute;
+        top: 70px;
+        left: 120px; */
+    }
+    .email a{
         color: #535252;
     }
 </style>

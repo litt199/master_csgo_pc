@@ -19,7 +19,7 @@
       <div class="tanchuang" v-show='tanchuang' @mouseleave="service">
             <div class="oneimg s" >
                  <img class="dasds" src="../assets/servise/4.png" alt="">
-                 <a href="tencent://message/?uin=2324366756&Site=qq&Menu=yes">客服</a>
+                 <a target="_blank" href="tencent://message/?uin=2471536641&Site=qq&Menu=yes">客服</a>
             </div>
 
            
@@ -27,7 +27,8 @@
                  <img class="dasds" src="../assets/servise/4.png" alt=""> 
                  <div class="kefu">
                     <!--<img class="threeimg" src="../assets/servise/5.png" alt="">-->
-                     <a  href="http://wpa.qq.com/msgrd?v=1&uin=2324366756&site=qq&menu=yes">QQ: 6484684645</a>
+                    <a target="_blank" href="http://wpa.qq.com/msgrd?v=3&uin=2471536641&site=qq&menu=yes">QQ: 2471536641</a>
+                     <!-- <a  href="http://wpa.qq.com/msgrd?v=3&uin=12345678&site=qq&menu=yes"></a> -->
                 </div> 
             </div>
       </div>

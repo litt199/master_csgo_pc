@@ -66,5 +66,6 @@ export default {
      float: left;
      margin-top: 229px;
      position: relative;
+     min-height: 1288px;
 }
 </style>
