@@ -136,7 +136,6 @@ export default {
                  getPublicBoxLeftImg().then((res)=>{
                   //  console.log(res)
                    if(res!=undefined){
-                  
                      var dataList=res.data;
                        dataList.forEach((item,i) => {
                           item.state=false;
@@ -243,6 +242,7 @@ export default {
     white-space: nowrap;
     width: 154px;
     color: #fff;
+    transform: translate3d(0,0,0);
 }
 .boxLeft .bg{
     width: 202px;

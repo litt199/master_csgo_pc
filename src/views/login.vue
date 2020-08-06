@@ -1,6 +1,54 @@
 <template>
   <div class="login">
-        <div class="login_top">
+      <div class="reg_top" v-cursor>
+          <div>
+              <p class="number  q">1</p>
+              <p>输入手机号</p>
+          </div>
+          <span></span>
+          <div>
+              <p class="number">2</p>
+              <p>个人信息设置</p>
+          </div>
+           <span class="span"></span>
+          <div>
+              <p class="number">3</p>
+              <p>steam信息设置</p>
+          </div>
+
+      </div>
+      <div class="logo_box">
+           <img class="logo" src="../assets/login/LOGO.png" alt="">
+           <p class="">注册新用户</p>
+      </div>
+      
+      <div class="input_box">
+          <p class="qian_shuzi">+86 
+              <img src="../assets/login/6.png" alt="">
+          </p>
+         <input  class="input1" type="text" placeholder="请输入账号" style="color:#fff" v-model="phone"   name="" id="111123" v-on:keyup.enter = "handleRigister">
+         <input  class="input1 input" type="text" placeholder="请输入验证码" style="color:#fff" v-model="code"   name="" id="111123" v-on:keyup.enter = "handleRigister">
+            <!-- 获取验证码 -->
+            <div class="getma" @click="get_code" v-cursor>
+                <div class="getma_box"></div>
+                <div class="text_yanzhenma">
+                    {{getyanma}}
+                </div>
+            </div>
+
+         <div class="qudenglu" v-cursor @click="handleRigister">
+            下一步
+        </div>
+
+         <div class="router_text" @click="()=>{$emit('qudenglu')}">
+                <p v-cursor >已有帐号,去登陆</p>
+            </div>
+      </div> 
+
+
+
+
+        <!-- <div class="login_top">
             <img class="top_img" src="../assets/login/1.png" alt="">
              <p class="text_bg">SIGN UP</p>
             <p class="text_zhuce">注册</p>
@@ -36,16 +84,16 @@
             <img class="input_img" src="../assets/login/3.png" alt="">
             <input class="input" type="password" v-model="password1" placeholder="再次输入密码"  name="" id="37">
         </div>
-        <!-- <div class="login_input">
+         <div class="login_input">
   
             <img class="input_img" src="../assets/login/4.png" alt="">
             <input class="input" v-model="invition"  type="text" placeholder="邀请码/选填"  name="" id="4" v-on:keyup.enter = "handleLogin">
         </div>
          -->
-        <div class="textxie">
-            <!-- <div>
+        <!-- <div class="textxie">
+            <div>
                 我已阅读并接受<p class="textblack">{{xian}}</p>
-            </div> -->
+            </div>
         </div>
 
         <div class="login_input login_input1 " @click="handleLogin">
@@ -55,7 +103,7 @@
 
         <div class="beginLogin" @click="handleRigister">已有账号,前去登录</div>
 
-         <img class="login_bgc" src="../assets/login/5.png" alt="">
+         <img class="login_bgc" src="../assets/login/5.png" alt=""> --> 
   </div>
 </template>
 
@@ -64,7 +112,7 @@ import { JSEncrypt } from 'jsencrypt';
 //引入错误提示组件
 import {Message} from 'element-ui';
 //引入注册api
-import { getCode,HandleRegister } from '../axios/Apilogin'
+import { getCode,HandleRegister,getVCode,verifyCode } from '../axios/Apilogin'
 import Bus from "../axios/Bus";
 export default {
   name: '',
@@ -105,9 +153,10 @@ export default {
             const Phonestate = that.verify_phone(that.phone)
             if(Phonestate&&that.getyanma=="获取验证码"){   //如果手机号返回正确 则调接口
                 const params={
-                    "registerName":that.phone
+                    "mobile":that.phone,
+                    isRegist:1,
                 }
-                getCode(params).then((res)=>{
+                getVCode(params).then((res)=>{
                     if(res!=undefined){
                         // console.log(res)
                         if(res.code==1){
@@ -135,8 +184,50 @@ export default {
             }
            
       },
+      //跳转下一步
       handleRigister(e){
-           this.$emit('changeRister')
+          var that=this;
+          if(this.phone==""||this.code==""){   //如果手机号返回正确 则调接口
+                   Message({                                          //element-ui中的展示请求错误的信息
+                        duration:2000,                                
+                        message:"请输入手机号和验证码",
+                        type:'error'
+                    })
+                    return
+          }
+             const params={
+                    "username":that.phone,
+                    "code":this.code
+                }
+              verifyCode(params).then((res)=>{
+                    if(res!=undefined){
+                   
+                        if(res.code==1){
+                            Message({                                          //element-ui中的展示请求错误的信息
+                                duration:2000,                                
+                                message:"验证码错误",
+                                type:'error'
+                            })
+                        }else if(res.code==0){
+                            let msg = {
+                                registerName:this.phone,
+                                code:res.msg
+                            }
+                              this.$emit('changeRister',msg)
+                        }else{
+                             Message({                                          //element-ui中的展示请求错误的信息
+                                duration:2000,                                
+                                message:"未知错误，从重新注册",
+                                type:'error'
+                            })
+                        }
+                        this.phone = "";
+                        this.code = "";
+
+                    }
+           
+                })
+          
       },
       
       //点击登录按钮
@@ -233,24 +324,211 @@ export default {
 
 <style scoped>
     .login{
-        position: fixed;
+            position: fixed;
         top: 50%;
         left: 50%;
-        width: 490px;
-        height: 609px;
-        background-color: #fff;
+        width: 320px;
+        height: 469px;
+        background-image: linear-gradient(90deg, #141414 0%, #101010 100%);
+        border-radius: 12px;
+        background: linear-gradient(90deg, #141414 0%, #101010 100%);
+        background-image:-moz-linear-gradient(90deg, #141414 0%, #101010 100%);
+        background-image:-ms-linear-gradient(90deg, #141414 0%, #101010 100%);
+        background-image:-o-linear-gradient(90deg, #141414 0%, #101010 100%);
+        background-image:linear-gradient(90deg, #141414 0%, #101010 100%);
         transform: translate(-50%);
-        z-index: 9999;
-        background: linear-gradient( #201217, #0f0f0f);
-        background-image:-moz-linear-gradient(#201217,#0f0f0f);
-        background-image:-ms-linear-gradient(#201217,#0f0f0f);
-        background-image:-o-linear-gradient(#201217,#0f0f0f);
-        background-image:linear-gradient(#201217,#0f0f0f);
+        z-index: 99999999999;
+        border: 2px solid #393939;
         display: flex;
         flex-direction: column;
         align-items: center;
-     
     }
+
+    
+    .reg_top{
+        width: 100%;
+        justify-content: space-between;
+        box-sizing: border-box;
+        padding: 0 29px;
+        margin-top: 15px;
+        font-size: 12px;
+        color: #666666;
+        height: 44px;
+        display: flex;
+        align-items: center;
+    }
+    .reg_top div{
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+    }
+    .reg_top span{
+        width: 71px;
+        height: 2px;
+        background-color: #464646 ;
+        position: absolute;
+        left: 74px;
+        top: 24px;
+    }
+    .reg_top .span{
+        left: 176px;
+        top: 24px;
+    }
+    .q.number{
+        background: linear-gradient(90deg, #E60064 0%, #E65064 100%);
+        background-image:-moz-linear-gradient(90deg, #E60064 0%, #E65064 100%);
+        background-image:-ms-linear-gradient(90deg, #E60064 0%, #E65064 100%);
+        background-image:-o-linear-gradient(90deg, #E60064 0%, #E65064 100%);
+        background-image:linear-gradient(90deg, #E60064 0%, #E65064 100%);
+    }
+    .number{
+        width: 24px;
+        height: 24px;
+        background-color: #444444;
+        border-radius: 50%;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        color: #fff;
+        margin-bottom: 5px;
+    }
+    .logo{
+        width:195px;
+        margin-top: 36px;
+    }
+    .logo_box{
+        text-align: center;
+        font-size: 14px;        
+    }
+    .logo_box p{
+        margin-top:10px;
+        color: #b1b1b1;
+    }
+    .input_box{
+        margin-top: 35px;
+        display: flex;
+        flex-direction: column;
+        justify-content: center;
+        position: relative;
+    }
+    .qian_shuzi{
+        position: absolute;
+        top: 6px;
+        left: 16px;
+        font-size: 14px;
+        color: #E60064;
+    }
+    .qian_shuzi img{
+        margin-left: 3px;
+        margin-top: -1px;
+    }
+    .input.input1{
+         padding-left:17px;
+         padding-right: 100px;
+         
+    }
+    .input1:-webkit-autofill {
+        box-shadow: 0 0 0 1000px #141414 inset;
+        -webkit-text-fill-color: #fff;
+        caret-color:#fff;
+    }
+     .input1{
+        width: 240px;
+        height: 34px;
+        background: none;
+        border: 1px solid #E60064;
+        margin-bottom: 20px;
+        color: #b1b1b1;
+        font-size: 14px;
+        border-radius: 17px;
+        padding-left: 70px;
+        box-sizing: border-box;
+    }
+     input::-webkit-input-placeholder{
+        color:#858686;
+        }
+        input::-moz-placeholder{
+        color:#858686;
+        }
+        input:-ms-input-placeholder{
+        color:#858686;
+        }
+    .qudenglu{
+         width: 240px;
+        height: 34px;
+         background: linear-gradient(to right,#E60064,#E65064);
+        background: -webkit-linear-gradient(to right,#E60064,#E65064);
+        background: -moz-linear-gradient(to right,#E60064,#E65064);
+        background: -ms-linear-gradient(to right,#E60064,#E65064);
+        background: -o-linear-gradient(to right,#E60064,#E65064);
+        margin-top: 5px;
+        border-radius:17px;
+        text-align: center;
+        line-height: 34px;
+        color: #fff;
+        font-size: 14px;
+    }
+    .router_text{
+        justify-content: center;
+        display: flex;
+        margin-top: 15px;
+        color: #cf035b;
+        padding:0 10px;
+        box-sizing: border-box;
+    }
+    .zhaohu{
+        color: #464646;
+    }
+    .getma{
+        position: absolute;
+        top: 60px;
+        right: 16px;
+        color: #E60064;
+        font-size: 14px;
+    }
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+/*     
     .login_top{
         display: flex;
         width: 160px;
@@ -370,9 +648,7 @@ export default {
         top: 0;
    }
    .text_yanzhenma{
-       /* position: absolute;
-       top: 7px;
-       left: 12px; */
+
        position: relative;
    }
     input::-webkit-input-placeholder{
@@ -398,7 +674,7 @@ export default {
     }
     .textxie{
         font-size:14px;
-        /* font-style: italic; */
+
         color: #d30f5c;
         margin-top: 18px;
     }
@@ -412,5 +688,5 @@ export default {
         left: -20px;
         top: -20px;
         z-index: -1;
-    }
+    } */
 </style>

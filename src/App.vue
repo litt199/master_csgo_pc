@@ -24,7 +24,7 @@
   </div>
 </template>
 <script>
-import {getMessage,getBanner,GetProplePrice} from './axios/Apilogin'
+import {getMessage,getBanner} from './axios/Apilogin'
   import Bus from './axios/Bus'
   // const Index =()=>import('./views/index')
   const headerNew =()=>import ('./components/HeaderNew')
@@ -323,5 +323,11 @@ import {getMessage,getBanner,GetProplePrice} from './axios/Apilogin'
     Explain:		Clearfix（简写cl）避免因子元素浮动而导致的父元素高度缺失能问题
     */
     .cl:after,.clearfix:after{content:".";display:block;height:0;clear:both;visibility:hidden}.cl,.clearfix{zoom:1}
-
+a{
+text-decoration:none;
+color:#fff;
+}
+a:hover {
+    text-decoration: none;
+}
 </style>

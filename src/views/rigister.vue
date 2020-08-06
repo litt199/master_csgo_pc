@@ -1,7 +1,32 @@
 <template>
+
   <div class="register">
-     
-      <div class="exit" @click="exit" v-cursor>x</div>
+      <div class="reg_top" v-cursor  @click="handeleverification">
+          手机验证码登录
+         
+          <img src="../assets/register/2.png" alt="">
+      </div>
+      <div class="logo_box">
+           <img class="logo" src="../assets/login/LOGO.png" alt="">
+           <p class="">欢迎您的到来</p>
+      </div>
+      
+      <div class="input_box">
+         <input  class="input1" type="text" placeholder="请输入账号" style="color:#fff" v-model="phone"  @input="Phone"  name="" id="111123" v-on:keyup.enter = "login1">
+         <input  class="input1" type="password" placeholder="请输入密码" style="color:#fff" v-model="password"  @input="Phone"  name="" id="111121123" v-on:keyup.enter = "login1">
+         <div class="qudenglu" v-cursor  @click="login1">
+            登陆
+        </div>
+
+           <div class="router_text">
+                <p v-cursor @click="handleClickRegister">去注册</p>
+                <p class="zhaohu" v-cursor  @click="wangjimima">密码找回</p>
+            </div>
+      </div>    
+    
+      
+   
+      <!-- <div class="exit" @click="exit" v-cursor>x</div>
        <div class="login_top">
             <img class="top_img" src="../assets/login/1.png" alt="">
              <p class="text_bg">LOGIN</p>
@@ -32,7 +57,7 @@
             <p v-cursor @click="wangjimima">忘记密码</p>
         </div>
 
-         <img class="register_bgc" src="../assets/register/1.png" alt="">
+         <img class="register_bgc" src="../assets/register/1.png" alt=""> -->
   </div>
 
 </template>
@@ -64,6 +89,10 @@ export default {
     //  }
     },
   methods:{
+      //跳转手机验证码登录
+      handeleverification(){
+          this.$emit("handeleverification_verification")
+      },
       exit(){  //点击叉，不显示登陆页面
           this.$emit('changeExit')
           Bus.$emit('changeTimer',1)  
@@ -116,9 +145,11 @@ export default {
                             type:'error'
                         })
                     }else if(res.code===0){
-                        this.$emit('changeState',2)
-                        Bus.$emit('changeTimer',1)
+                 
+                            localStorage.setItem('fuzhineirong',res.data.user.user.extensioncode)  //储存本地的token
                             localStorage.setItem('token',res.data.token)  //储存本地的token
+                              this.$emit('changeState',2)
+                            Bus.$emit('changeTimer',1)
                             Message({
                                 duration:2000,                              //element-ui中的展示请求错误的信息+ 
                                 message:"登录成功",
@@ -160,21 +191,121 @@ export default {
         position: fixed;
         top: 50%;
         left: 50%;
-        width: 490px;
-        height: 425px;
-        background: linear-gradient( #201217, #0f0f0f);
-        background-image:-moz-linear-gradient(#201217,#0f0f0f);
-        background-image:-ms-linear-gradient(#201217,#0f0f0f);
-        background-image:-o-linear-gradient(#201217,#0f0f0f);
-        background-image:linear-gradient(#201217,#0f0f0f);
+        width: 320px;
+        height: 469px;
+        background-image: linear-gradient(90deg, #141414 0%, #101010 100%);
+        border-radius: 12px;
+        background: linear-gradient(90deg, #141414 0%, #101010 100%);
+        background-image:-moz-linear-gradient(90deg, #141414 0%, #101010 100%);
+        background-image:-ms-linear-gradient(90deg, #141414 0%, #101010 100%);
+        background-image:-o-linear-gradient(90deg, #141414 0%, #101010 100%);
+        background-image:linear-gradient(90deg, #141414 0%, #101010 100%);
         transform: translate(-50%);
-        z-index: 99999999999;
-        /* background: linear-gradient(#232123, #65072c); */
+        -ms-transform:translate(-50%);	/* IE 9 */
+        -moz-transform:translate(-50%);/* Firefox */
+        -webkit-transform:translate(-50%); /* Safari 和 Chrome */
+        -o-transform:translate(-50%); 	/* Opera */
+        /* z-index: 99999999999; */
+        border: 2px solid #393939;
         display: flex;
         flex-direction: column;
         align-items: center;
-
     }
+    .reg_top{
+        margin-left: 170px;
+        margin-top: 5px;
+        font-size: 12px;
+        color: #666666;
+        height: 44px;
+        display: flex;
+        align-items: center;
+    }
+    .reg_top img{
+        margin-left: 5px;
+    }
+    .logo{
+        width:195px;
+        margin-top: 36px;
+    }
+    .logo_box{
+        text-align: center;
+        font-size: 14px;        
+    }
+    .logo_box p{
+        margin-top:10px;
+        color: #b1b1b1;
+    }
+    .input_box{
+        margin-top: 35px;
+        display: flex;
+        flex-direction: column;
+        justify-content: center;
+    }
+     .input1{
+        width: 240px;
+        height: 34px;
+        background: none;
+        border: 1px solid #E60064;
+        margin-bottom: 20px;
+        color: #b1b1b1;
+        font-size: 14px;
+        border-radius: 17px;
+        padding-left: 18px;
+        box-sizing: border-box;
+    }
+    .input1:-webkit-autofill {
+        -webkit-text-fill-color: #fff !important;
+         box-shadow: 0 0 0 1000px #141414 inset;
+         caret-color:#fff;
+    }
+     input::-webkit-input-placeholder{
+        color:#858686;
+        }
+        input::-moz-placeholder{
+        color:#858686;
+        }
+        input:-ms-input-placeholder{
+        color:#858686;
+        }
+    .qudenglu{
+         width: 240px;
+        height: 34px;
+         background: linear-gradient(to right,#E60064,#E65064);
+        background: -webkit-linear-gradient(to right,#E60064,#E65064);
+        background: -moz-linear-gradient(to right,#E60064,#E65064);
+        background: -ms-linear-gradient(to right,#E60064,#E65064);
+        background: -o-linear-gradient(to right,#E60064,#E65064);
+        margin-top: 5px;
+        border-radius:17px;
+        text-align: center;
+        line-height: 34px;
+        color: #fff;
+        font-size: 14px;
+    }
+    .router_text{
+        justify-content: space-between;
+        display: flex;
+        margin-top: 15px;
+        color: #cf035b;
+        padding:0 10px;
+        box-sizing: border-box;
+    }
+    .zhaohu{
+        color: #464646;
+    }
+
+
+
+
+
+
+
+
+
+
+
+
+
     .register_bgc{
         width: 535px;
         height: 475px;
@@ -301,15 +432,7 @@ input:-webkit-autofill:active {
         font-size: 16px;
         font-style: italic;
     }
-     input::-webkit-input-placeholder{
-        color:#e60f64;
-    }
-        input::-moz-placeholder{
-        color:#e60f64;
-        }
-        input:-ms-input-placeholder{
-        color:#e60f64;
-        }
+
     .text_kuaijie{
         display: flex;
         color: #7d7a7a;

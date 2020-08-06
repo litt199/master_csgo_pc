@@ -48,7 +48,8 @@
                               <div class="joinBgGone" v-if="!joinBg">
                               
                               </div>
-                              <div class="but" v-cursor @click="AtonceClick(message.id)">{{join}}</div>
+                              <div class="but" v-cursor @click="AtonceClick(message.id)" v-show='joinState'>{{join}}</div>
+                              <div class="but" v-cursor v-show="!joinState">{{join}}</div>
                             </div>
                             <p>您可以返回查看更多精彩活动</p>
                         </div>
@@ -168,7 +169,15 @@
     </div>
     <div v-show="back_bg" @click="handleBack_bg" class="black_bg"></div>
 
+      <div class="getPrize" v-show="showGetPrizeTip">
+          <p class="getPrizeP1">推广活动专属ROLL房，</p>
+          <p class="getPrizeP1">请前往推广活动页面查看</p>
+          <p class="getPrizeP11"></p>
+          <p class="getPrizeP2 getPrizeP21" @click="joinActivity" v-cursor>去推广活动页面</p>
+          <p class="getPrizeP2" @click="closeJoin" v-cursor>返回</p>
+      </div>
 
+      <div v-show="showGetPrizeTip"  @click="closeJoin"  class="black_bg"></div>
   </div>
 </template>
 
@@ -211,6 +220,10 @@ export default {
     },
   data() {
     return {
+      joinState:true,
+          back_bg:true,
+       chooseName:"12334",
+       showGetPrizeTip:false,
       imgbg:this.$store.getters.neiimg2.image,
       avatar:require('../assets/avatar/logo_icon.png'),//头像
         knowimg:true,
@@ -244,6 +257,18 @@ export default {
         this.getRollFuli();
   },
   methods:{
+     closeJoin(){
+      this.showGetPrizeTip=false
+    },
+
+    joinActivity(){
+        this.$router.push({  
+          path: '/public_box_home/spreadCenter', 
+        })
+    },
+    Rollmessage(){
+        this.showGetPrizeTip=true     
+    },
     //取消
     handleBack_bg(){
         this.fillPasswordjoin=false;
@@ -273,7 +298,7 @@ export default {
             if(res!=undefined){
               this.message=res.data;
               // console.log("---------------------rll福利res.data");
-              // console.log(res.data);
+              // console.log(this.message.joinWay);
                 var dataList = res.data.rollGoods;
                 var datafunList = this.dataList(dataList)
                 this.rollGoods=datafunList;
@@ -282,12 +307,14 @@ export default {
               }
               if(!res.data.join){
                   this.join="已参与"
+                  this.joinState=false
               }
               if(!res.data.status){
                   this.join="该活动已结束"
                   this.joinBg=false;
                   this.playState='已结束';
                   this.urserAndPrize=false
+                   this.joinState=false
               }
             }
           })
@@ -370,49 +397,55 @@ export default {
     },
     //活动点击理解参与
     AtonceClick(id){
-      const data={
-        "id":id
-      }
-    postRollJon(data).then((res)=>{
-      if(res!=undefined){
-      if(res.msg=='success'){
-          this.join='已参与'
-          // GetProplePrice().then((res)=>{
-          //     console.log("-----------------------用户个人信息")
-          //     console.log(res.data)
-          //     this.message.joinUser.push({
-          //         "avatar": res.data.avatar,
-          //         "nickName": res.data.nickName
-          //     })
-          // })
-          //获取当前信息
-          let Rollid=this.$route.query.Rollid;  // 带过来的id
-          getRollFuli(Rollid).then((res)=>{
+      if(this.message.joinWay===4){
+        this.showGetPrizeTip=true
+      }else{
+           const data={
+              "id":id
+            }
+           postRollJon(data).then((res)=>{
             if(res!=undefined){
-              this.message=res.data;
-                var dataList = res.data.rollGoods;
-                var datafunList = this.dataList(dataList)
-                this.rollGoods=datafunList;
+            if(res.msg=='success'){
+                this.join='已参与'
+                // GetProplePrice().then((res)=>{
+                //     console.log("-----------------------用户个人信息")
+                //     console.log(res.data)
+                //     this.message.joinUser.push({
+                //         "avatar": res.data.avatar,
+                //         "nickName": res.data.nickName
+                //     })
+                // })
+                //获取当前信息
+                let Rollid=this.$route.query.Rollid;  // 带过来的id
+                getRollFuli(Rollid).then((res)=>{
+                  if(res!=undefined){
+                    this.message=res.data;
+                      var dataList = res.data.rollGoods;
+                      var datafunList = this.dataList(dataList)
+                      this.rollGoods=datafunList;
+                  }
+                })
+            }else if(res.code===1){//已参与
+                this.getRollFuli();
+                // Message({                                      //element-ui中的展示请求错误的信息
+                //      message:res.msg,
+                //      type:'error'
+                //  })
+            }else if(res.code===2){
+              this.fillPasswordjoin=true;
+              this.back_bg=true;
+              this.stop();
+            }else if(res.code==3){
+                Message({
+                    message:res.msg,
+                    type:'error'
+                  })
+              }
             }
           })
-      }else if(res.code===1){//已参与
-          this.getRollFuli();
-           // Message({                                      //element-ui中的展示请求错误的信息
-           //      message:res.msg,
-           //      type:'error'
-           //  })
-      }else if(res.code===2){
-        this.fillPasswordjoin=true;
-        this.back_bg=true;
-        this.stop();
-      }else if(res.code==3){
-           Message({
-              message:res.msg,
-              type:'error'
-            })
-        }
       }
-    })
+   
+
   },
 
     //封装秒数转化为具体时间
@@ -1067,5 +1100,57 @@ export default {
       top: 0;
       left: 0;
     }
+    .getPrize{
+    width: 334px;
+    position: fixed;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%,-50%);
+    z-index: 110;
+    color: #fff;
+    background: #E60064;
+    background-image: linear-gradient(90deg, #E60064 0%, #E65064 100%);
+    border-radius: 16px;
+    text-align: center;
+    padding: 60px 20px 40px 20px;
+}
+.getPrizeP1{
+  color: #842336;
+  font-size: 14px;
+  font-weight: bold;
+}
+.getPrizeP11{
+  margin-bottom: 20px;
+}
+.getPrizeP2{
+  width: 216px;
+  height: 34px;
+  line-height: 34px;
+  margin-left: 59px;
+  border:1px solid #842336;
+  border-radius: 24px;
+  margin-bottom: 12px;
+  color: #842336;
+}
+.getPrizeP21{
+  background: #842336;
+  color: #fff;
+}
+.getPrizeP{
+  margin-top: 40px;
+}
+.getPrizeP1 span{
+  color:#fff;
+}
+.black_bg{
+  width: 100%;
+  height: 1080px;
+  position: fixed;
+  background: #000;
+  opacity: 0.5;
+  z-index: 50;
+  top: 0;
+  left: 0;
+}
 </style>
 

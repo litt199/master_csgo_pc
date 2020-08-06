@@ -1,12 +1,14 @@
 <template>
   <div class="publicBox123" v-cursor>
       <div class="box" :style="{height:Pheight+'px',width:Pwidth+'px'}"  @mouseenter="enter"  @mouseleave="leave">
+          <img class="circle" src="../assets/csgo/5.png" alt="">
           <div class="box_small"   v-top_down="sss">
-                <img class="things_img" :style="{width:img1Pwidth+'px'}"   v-lazy="img1" alt="">
-                
-                <img class="guang_img" :style="{width:img2Pwidth+'px'}"  v-lazy="img2" alt="">
-                <!-- 箱子图片 -->
-                <img class="publci_img" :style="{width:imgPwidth+'px'}"  v-lazy="img" alt="">   
+                <div class="img_box">
+                    <img :class="things_imgtrue?'things_img active':'things_img '" :style="{width:img1Pwidth+'px',top:imgPtop+'px'}"   v-lazy="img1" alt="">
+                    <img class="guang_img" :style="{width:img2Pwidth+'px'}"  v-lazy="img2" alt="">
+                    <!-- 箱子图片 -->
+                    <img class="publci_img"   v-lazy="img" alt="">   
+               </div> 
                 <div class="text_box">
                     <p class="text">{{title}}</p>
                     <div class="price" v-cursor>
@@ -26,6 +28,14 @@
 export default {
   name: 'publcibox',
   props:{
+      things_imgtrue:{
+          type:Boolean,
+          default:false
+      },
+      imgPtop:{
+        type:Number,
+        default:21,
+      },
       img1Pwidth:{
         type:Number,
         default:136,
@@ -95,6 +105,12 @@ export default {
 </script>
 
 <style scoped>
+.img_box{
+    width: 183px;
+    height: 200px;
+    position: relative;
+
+}
 .box{
     display: flex;
     align-items: center;
@@ -118,11 +134,14 @@ export default {
 .publci_img{
     width: 183px;
     /* height: 92px; */
-    margin-left: 12px;
-    /* position: absolute;
-    top: 19px;
-    left: 7px;
-    z-index: 2; */
+    /* margin-left: 12px; */
+   
+    
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%,-50%);
+    z-index: 2;
 }
 .things_img{
     width: 136px;
@@ -130,7 +149,7 @@ export default {
     margin-left: 12px;
     position: absolute;
     top: 4px;
-    left: 16px;
+    left: 7px;
     z-index: 4;
 }
 .guang_img{
@@ -146,6 +165,7 @@ export default {
     display: flex;
     align-items: center;
     flex-direction: column;
+    z-index: 2;
 }
 .text_box{
     /* position: absolute;
@@ -155,7 +175,7 @@ export default {
     display: flex;
     align-items: center;
     flex-direction: column;
-    font-style: italic;
+    /*font-style: italic;*/
 }
 .text{
     color: #666666;
@@ -216,7 +236,9 @@ export default {
     background-color: #e60e64;
 }
 .kaiqi{
-    font-weight: 900;
+    font-family: SourceHanSansCN-Regular;
+    font-size: 12px;
+    color: #FFFFFF;
 }
 .bg_red{
     background: -webkit-linear-gradient(bottom,rgba(98,13,97,0.8),rgba(162,66,152,0.1));
@@ -225,21 +247,40 @@ export default {
     background: -o-linear-gradient(bottom,rgba(98,13,97,0.8),rgba(162,66,152,0.1));
     background: linear-gradient(bottom,rgba(98,13,97,0.8),rgba(162,66,152,0.1));
 }
-.ani .publci_img{
+/* .ani .publci_img{
     animation: topfly 0.7s linear infinite alternate;
-}
+} */
 .ani .things_img{
-    animation: topfly 0.7s linear infinite alternate;
+    animation: topflydww 0.7s linear infinite alternate;
+}
+.ani .things_img.active{
+    animation: topflydww2 0.7s linear infinite alternate;
 }
 .ani .guang_img{
     animation: xuan 2s linear infinite ;
 }
 @keyframes topfly{
     from{
-        top: 4px;
+        top: 100px;
     }
     to{
-        top: 15px;
+        top: 90px;
+    }
+}
+@keyframes topflydww2{
+    from{
+        top: 32px;
+    }
+    to{
+        top: 28px;
+    }
+}
+@keyframes topflydww{
+    from{
+        top: 20px;
+    }
+    to{
+        top:15px;
     }
 }
 
@@ -257,5 +298,12 @@ export default {
         opacity: 0;
     }
 }
+.circle{
+    width: 173px;
+    position: absolute;
+    top: 64px;
+    left: 0;
+}
+
 </style>
 

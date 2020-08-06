@@ -30,14 +30,21 @@
          
            <div class="box_right">
                <div class="hengxian_box" v-for="(item,index1) in list" :key="index1">
-                    <div class="right_top_heng">
+                    <!--<div class="right_top_heng">
                         <img src="../assets/csgo/1.png" alt="">
                         <p>{{item.groupName}}</p>
                         <img class="hengxian" src="../assets/csgo/2.png" alt="">
                         <img class="triangle" src="../assets/csgo/3.png" alt="">
+                    </div>-->
+                    <div class="right_top_heng" v-for="(item,index1) in list" :key="index1">
+                        <div class="right_top_shu"></div>
+                        <p>{{item.groupName}}</p>
+                        <div class="right_jian" @click="foldFunc">
+                          <img :src="isFold===true?foldImg.img1:foldImg.img2" alt="">
+                        </div>
                     </div>
-                    <div class="Double_box">
-                        <div v-for="(item1,index) in item.goodsInfo"  :key='index' @click="boxClick(index1,index)">
+                    <div class="Double_box"  ref="doubleBox">
+                        <div v-for="(item1,index) in item.goodsInfo"  :key='index' @click="boxClick(index1,index)" style="height:250px">
                             <indexPublicBox
                                     @enter="mouseent"
                                     @leave='mouseleave'
@@ -47,16 +54,19 @@
                                     :img="item1.image"
                                     :img1="item1.goodsImage"
                                     :img2="item1.bgImage"
-                                    :Pheight='172'
-                                    :Pwidth='145'
-                                    :imgPwidth='134'
-                                    :img1Pwidth='99'
+                                    :Pheight='203'
+                                    :Pwidth='175'
+                                    :imgPwidth='160'
+                                    :img1Pwidth='124'
+                                    :imgPtop='33'
+                                    :things_imgtrue=true
                             >
                             </indexPublicBox>
                         </div>
 
                     </div>
                </div>
+
           </div>
 
           
@@ -72,7 +82,7 @@ export default {
   name: '',
   components: {
       publicBoxLeft,
-      indexPublicBox
+      indexPublicBox,
   },
   data() {
     return {
@@ -82,6 +92,12 @@ export default {
         {}
       ],
       imgUrl:this.$store.state.imgUrl,
+      isFold:true,
+      foldImg:{
+        "img1":require("../assets/csgo/7.png"),
+        "img2":require("../assets/csgo/6.png"),
+      },
+      foldHeight:0
     }
   },
      computed: {
@@ -95,17 +111,32 @@ export default {
       }
     },
   mounted(){
- 
-    
     getCsgoBox().then((res)=>{
       if(res!=undefined){
         this.list=res.data;
-        // console.log("-------------开箱页面");
-        // console.log(res.data);
+        this.foldHeight = (Math.ceil(this.list[0].goodsInfo.length/5))*250+"px"
+        this.$nextTick(e => {
+          this.$refs.doubleBox[0].style.height = this.foldHeight;
+        });
       }
     })
   },
+  created(){
+    
+  },
   methods:{
+    //箱子展开收起
+      foldFunc(){
+        // console.log("------------this.$refs.doubleBox")
+        // console.log(this.$refs.doubleBox.clientHeight)
+        if(this.isFold){
+          this.$refs.doubleBox[0].style.height = 0 +"px"
+        }else{
+          this.$refs.doubleBox[0].style.height = this.foldHeight;
+        }
+        this.isFold = !this.isFold;
+        
+      },
       mouseent(e){
         //   console.log(e)
       },
@@ -213,7 +244,11 @@ export default {
   padding-left: 20px;
   padding-top: 20px;
   margin-top: 10px;
+  transition: all 0.5s;
+  overflow: hidden;
+
 }
+
 .hengxian_box{
     margin-bottom: 20px;
 }
@@ -224,8 +259,10 @@ export default {
 .right_top_heng{
     display: flex;
     align-items: center;
-    margin-left: 40px;
+    /*margin-left: 40px;*/
+    position: relative;
 }
+/*
 .right_top_heng p{
    font-size: 16px;
     background-image:-webkit-linear-gradient(left,#c400ab,#f756a6);
@@ -238,6 +275,25 @@ export default {
     text-fill-color:transparent;
   font-weight: 900;
   margin-left: 7px;
+}*/
+.right_top_heng p{
+    /* font-size: 16px;*/
+    background-image:-webkit-linear-gradient(left,#e61364,#ff5477);
+    background-image:-moz-linear-gradient(left,#e61364,#ff5477);
+    background-image:-ms-linear-gradient(left,#e61364,#ff5477);
+    background-image:-o-linear-gradient(left,#e61364,#ff5477);
+    background-image:linear-gradient(left,#e61364,#ff5477);
+    -webkit-background-clip:text;
+    -webkit-text-fill-color:transparent;
+    text-fill-color:transparent;
+    font-weight: 900;
+    margin-left: 14px;
+    font-family: SourceHanSansCN-Bold;
+    font-size: 24px;
+    color: #E60064;
+    letter-spacing: 0;
+    line-height: 38px;
+    height: 38px;
 }
 .hengxian{
     margin-left: 8px;
@@ -246,5 +302,18 @@ export default {
     margin-right: 13px;
     margin-bottom: 10px;
 }
-
+.right_top_shu{
+    width: 6px;
+    height: 24px;
+    background-image: linear-gradient(0deg, #E60064 0%, #E65064 100%);
+    border-radius: 4px;
+}
+.right_jian{
+  width: 22px;
+  position: absolute;
+  right: 38px;
+}
+.right_jian img{
+  width: 100%;
+}
 </style>

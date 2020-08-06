@@ -476,14 +476,17 @@ export default {
 }
 .gun_box p{
   position: relative;
-
+  width: 95%;
+  text-overflow: ellipsis;
+  white-space:nowrap;
+  overflow: hidden;
 }
 
 .text{
   display: flex;
   align-items: center;
   justify-content: center;
-
+  width: 100%;
 }
 .bottom_box{
   width: 900px;

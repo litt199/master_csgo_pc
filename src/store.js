@@ -5,6 +5,7 @@ Vue.use(Vuex)
 
 export default new Vuex.Store({
   state: {
+      code:'',
       token:localStorage.getItem('token')?localStorage.getItem('token'):'',
       imgUrl:'https://blackholes.oss-cn-shanghai.aliyuncs.com',
       newsList: JSON.parse(localStorage.getItem('mes'))!=null?JSON.parse(localStorage.getItem('mes')):[{
@@ -77,8 +78,10 @@ export default new Vuex.Store({
     }
   },
   mutations: {
-     
-  },
+     setCode(state,code){
+       state.code=code;
+     }
+  },  
   actions: {
    
   }

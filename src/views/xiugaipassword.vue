@@ -18,7 +18,7 @@
         <div class="yanzhengma">
              <div class="login_input">
              
-                <input class="input1" type="text" v-model="code"  placeholder="验证码"  v-cursor  name="" id="1" v-on:keyup.enter = "handleLogin">
+                <input class="input1" type="text" v-model="code"  placeholder="验证码"  v-cursor  name="" id="1" v-on:keyup.enter = "login11234545">
                 <div class="getma" @click="get_code" v-cursor>
                     <div class="getma_box"></div>
                     <div class="text_yanzhenma">
@@ -44,7 +44,7 @@
 
 <script>
 import { JSEncrypt } from 'jsencrypt';
-import {login,getCode,getVCode} from '../axios/Apilogin'
+import {login,getCode,getVCode,verifyCode} from '../axios/Apilogin'
 import {Message} from 'element-ui'; //引入错误提示组件
 import Bus from '../axios/Bus';
 export default {
@@ -92,21 +92,36 @@ export default {
                     message:"请输入验证码",
                     type:'error'
             })
-         }else if(this.code==this.codeMessage){
-                const data={
-                    phone:this.phone,
-                    code:this.code
+         }else{
+               
+                const params={
+                    "username":this.phone,
+                    "code":this.code
                 }
-             this.$emit('queding',data);
-             this.phone="";
-             this.code="";
+                 verifyCode(params).then((res)=>{
+                    console.log(res)
+                    if(res!=undefined){
+                        if(res.code===0){
+                             const data={
+                                phone:this.phone,
+                                code:res.msg
+                            }
+                            this.$emit('queding',data);
+                            this.phone="";
+                            this.code="";
+                        }else{
+                         Message({     
+                                    duration:2000,                                 
+                                    message:"验证码输入错误",
+                                    type:'error'
+                            })
+                    }
+                        
+                    }
+                           
+                 })
+          
 
-        }else{
-             Message({     
-                    duration:2000,                                 
-                    message:"验证码输入错误",
-                    type:'error'
-            })
         }
 
 
@@ -136,7 +151,8 @@ export default {
             const Phonestate = that.verify_phone(that.phone)
             if(Phonestate&&that.getyanma=="获取验证码"){   //如果手机号返回正确 则调接口
                 const params={
-                    "mobile":that.phone
+                    "mobile":that.phone,
+                    "isRegist":0,
                 }
                 getVCode(params).then((res)=>{
                     if(res!=undefined){

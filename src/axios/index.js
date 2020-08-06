@@ -8,8 +8,8 @@ let loadingInstance = null //4，加载全局的loading
 const instance = axios.create({   //5,创建axios的示例，并且赋值默认值
     timeout:10000, //设置超时时间为10秒
     // baseURL:process.env.NODE_ENV==="production"?'':'/api'
-    // baseURL:"http://192.168.0.151:8001"       //设置默认的请求api 
-    baseURL:"http://app.obcase.cn"       //设置默认的请求api 
+    baseURL:"http://192.168.0.151:8001"       //设置默认的请求api 
+    // baseURL:"http://app.obcase.cn"       //设置默认的请求api 
     // baseURL:"/api"       //设置默认的请求api 
 })
 
@@ -75,7 +75,7 @@ instance.interceptors.response.use(response=>{
      if(error.response.status==401){  //判断登录权限问题，或者未登录，要跳转到登录页面
         // console.log(localStorage.getItem('token'))
         Bus.$emit('MoreLogin',1)   //利用兄弟组件传参，来实现登录页面自动显示
-  
+
         localStorage.removeItem('message')
         localStorage.removeItem('name')
      }else if(error.response.status==404||error.response.status==400){
@@ -90,7 +90,6 @@ instance.interceptors.response.use(response=>{
         })
         return Promise.reject(new Error('请求超时,请刷新重试'))
      }
-    
 })
 
 

@@ -28,6 +28,20 @@ export default {
     return {
 
     }
+  },
+  mounted(){
+//判断是否有推广来的数据，有的话，就储存到本地
+    this.decideQuery(this.$route.query.id);       
+  },
+  methods:{
+//判断是否有推广来的数据，有的话，就储存到本地
+    decideQuery(query){
+      if(query==null){
+        return
+      }else{
+        localStorage.setItem('decide',query)
+      }
+    },
   }
 }
 </script>

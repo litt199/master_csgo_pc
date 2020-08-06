@@ -767,8 +767,8 @@ export default {
       MycenterGetProplePrice(){
         GetProplePrice().then((res)=>{
                 if(res!=undefined){
+   
                     this.message=res.data;
-                    
                     if(res.data.transactionUrl==null){
                             this.transactionUrl='请更换交易链接'
                     }else{

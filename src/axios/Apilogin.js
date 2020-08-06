@@ -2,10 +2,15 @@
 import {Get,post} from './index';
 
 export const login = (params) => post('/auth/login',params)  //登录
+export const loginByCode = (params) => post('/auth/loginByCode',params)  //验证码登录
+export const sendVCode = (params) => post('/auth/sendLoginCode',params)  //验证码登录
+
+
 
 export const getCode = (params) => post('register/sendCode',params)  //获取验证码
-export const getVCode = (params) => post('register/sendVCode',params)  //获取验证码
-export const HandleRegister1 = (params) => post('register/resetPassword',params)  //注册
+export const getVCode = (params) => post('register/sendVCode',params)  //获取注册验证码 
+export const verifyCode = (params) => post('register/verifyCode',params)  //验证注册验证码
+export const HandleRegister1 = (params) => post('register/resetPassword',params)  //修改密码
 
 
 
@@ -59,3 +64,18 @@ export const userCenterCoupons=(data) =>Get('userCenter/coupons',data)  //出售
 //提交充值
 export const PostPayalipy =(data) =>post('pay/aliPay',data)
 export const GetpayqrCode=(id)=>Get('pay/qrCode'+id,)
+
+
+//推广页面
+export const promotionmyInfo =()=>Get('promotion/myInfo',);  //我的推广信息
+export const fetchPrize =(data)=>post('promotion/fetchPrize',data);  //领取奖励
+
+
+//抽奖页面
+export const everyDayPrize=(data)=>post('everyDayPrize/open',data)  //点击抽奖
+export const everyDayPrizeList=()=>Get('everyDayPrize/list',)  //  //获取抽奖的所有内容
+export const allRecord=()=>Get('everyDayPrize/allRecord',)  //综合中奖信息
+export const recordAll=()=>Get('everyDayPrize/record',)  //综合中奖信息
+export const getCodeNumber=()=>Get('everyDayPrize/list',)  //显示几次抽奖信息
+
+

@@ -30,7 +30,7 @@
                 <img class="img1"  :src="xxx==1?dsadasd1:dsadasd" alt="" @click="exit"  @mouseenter="handleenter" @mouseleave="handleleave" > 
                 <img class="img3" @click="investFun"  :src="chong==0?chognzhi1:chognzhi2" alt=""  @mouseenter="handleenter1" @mouseleave="handleleave1" > 
                 <div class="header_right">
-                    <div class="rigth_text">
+                    <div class="rigth_text" @click="TmyCenter">
                         <p>{{nickName}}</p>
                         <p>${{mmoney}}</p>
                         <!-- <div class="invest" >
@@ -45,16 +45,36 @@
            </div>
            <div class="img1_box2" @click="TmyCenter" v-cursor v-show='loginTu'>
                <!-- <div class="img1_box3"></div> -->
-               <img class="img2" src="../assets/header/5.png" alt="">
+                <!-- <img class="img2" src="../assets/header/5.png" alt=""> -->
+                <p>登陆</p>
+                <p>LOGIN IN</p>
            </div>
             
        </div>
         
         <div class="register_box">
-            <login @none_login='nonelogin' @changeRister="showRigister" v-show="stateRigister" ></login>
-            <register @wangjipass='handleWangjimima' @changeExit='chnageexitfather' @changeSteamRigister="steamdeng"  @changeRigister="change"  ref="regist"  @changeState="changestate" v-show='stateRegister'></register>
+            <!-- 注册 -->
+            <login @none_login='nonelogin' @changeRister="showLogin" v-show="stateRigister" @qudenglu="()=>{stateRigister=false;stateRegister=true}" ></login>
+            <login1 @changeRister="showLogin1" @closeLogin="showLogin2" v-show="stateRigister1" :topCode='topcode'></login1>
+            <login2 @changeRister="()=>{stateRigister2=false;stateRegister=true;loginTu=false;getMoney()}" v-show="stateRigister2" ></login2>
+            <!-- 登录 -->
+            <register
+             @wangjipass='handleWangjimima'
+            @changeExit='chnageexitfather' 
+            @changeSteamRigister="steamdeng"  
+            @changeRigister="change"  ref="regist" 
+            @changeState='()=>{stateRegister=false;back_bg=false;loginTu=false;getMoney();move()}'
+            v-show='stateRegister'
+            
+            @handeleverification_verification='()=>{verification=true;stateRegister=false}'
+            >
+            </register>
+
+            <!-- steam登录 -->
             <steamLogin @handleLogin="gobackLogin" v-show="stateSteamRegister"></steamLogin>
+            <!-- 修改密码 -->
             <xiugaipassword @queding='tiaozhuanxiugai' @FhandtopOne='shangyibu' @changeExit='chnageexitfather' @changeSteamRigister="steamdeng"  @changeRigister="change"    @changeState="changestate" v-show='xiugai'></xiugaipassword>
+            <!-- 确定修改 -->
             <quedingxiugai  
             @changeExit='chnageexitfather' 
             @changeSteamRigister="steamdeng"  
@@ -65,6 +85,17 @@
             :code="chuancode"
              @none_login='nonelogin'
             ></quedingxiugai>
+
+            <!-- 手机验证码登录 -->
+            <verificationcode
+            @handeleRigiseter='()=>{verification=false;stateRegister=true}'
+            @wangjipass='handleWangjimima'
+            @changeRigister1="()=>{stateRigister=true;verification=false;stateRegister=false}"
+             @changeState="changestate" 
+            v-show='verification' 
+            >
+
+            ></verificationcode>
         </div>
       <div v-show="back_bg" @click="handleBack_bg" class="black_bg"></div>
         
@@ -73,7 +104,10 @@
 
 <script>
 import login from '../views/login'
+import login1 from '../views/login1'
+import login2 from '../views/login2'
 import register from '../views/rigister'
+import verificationcode from '../views/verification_code'
 import steamLogin from '../views/steamLogin'
 import Bus from '../axios/Bus'
 import {MessageBox,Message} from 'element-ui'
@@ -85,12 +119,17 @@ export default {
   components: {
       register,
       login,
+      login1,
+      login2,
       steamLogin,
       xiugaipassword,
-      quedingxiugai
+      quedingxiugai,
+      verificationcode
   },
   data() {
     return {
+        topcode:"", //传给第二个注册页面的值
+        verification:false,  //显示手机验证码登录
         avatar:require("../assets/avatar/logo_icon.png"),
         chong:0,//充值按钮显示
         chuanphone:"",
@@ -105,11 +144,13 @@ export default {
         chognzhi2:require("../assets/header/10.png"),
         xxx:0,
         message:"",
-        loginTu:true,
+        loginTu:false,
         back_bg:false,  //储存是否显示黑色屏幕
         img1_box:false,// 是否显示退出
         stateRegister:false,//this.$store.state.token==""?true:false,   //登录页面是否显示
         stateRigister:false,   //注册页面是否显示
+        stateRigister1:false,
+        stateRigister2:false,
         stateSteamRegister:false,  //steam登录页面是否显示
         ids:-1, //储存上一次的id值
         id:-1,
@@ -125,7 +166,7 @@ export default {
             {
                 id:1,
                 title:"首页",
-                title_t:"HOME PAGE",
+                title_t:"HOME",
                 path:'/',
                 img1:require('../assets/header/topBar/7.png'),
                 img2:require('../assets/header/topBar/7-1.png'),
@@ -135,28 +176,43 @@ export default {
                 title:"CSGO开箱",
                 title_t:"CSGO BOXES",
                 path:'/public_box_home/csgo',
-                 img1:require('../assets/header/topBar/5-1.png'),
+                img1:require('../assets/header/topBar/5-1.png'),
                 img2:require('../assets/header/topBar/5.png'),
             },
             {
                 id:3,
                 title:"兑换商城",
-                title_t:"EXCHANGE MALL",
+                title_t:"EXCHANGE",
                 path:'/public_box_home/exchangeMall',
-                 img1:require('../assets/header/topBar/1.png'),
-                img2:require('../assets/header/topBar/1-1.png'),
+                 img1:require('../assets/header/topBar/1-1.png'),
+                img2:require('../assets/header/topBar/1.png'),
             },
             {
                 id:4,
-                title:"ROLL福利",
-                title_t:"ROLL WELFARE",
-                path:'/public_box_home/Roll',
-                 img1:require('../assets/header/topBar/3-1.png'),
+                title:"福利",
+                title_t:"WELFARE",
+                path:'/public_box_home/dailyFreeNew',
+                img1:require('../assets/header/topBar/3-1.png'),
                 img2:require('../assets/header/topBar/3.png'),
             },
-          
-            {
+             {
                 id:5,
+                title:"推广中心",
+                title_t:"SPREAD",
+                path:'/public_box_home/spread',
+                img1:require('../assets/header/topBar/8.png'),
+                img2:require('../assets/header/topBar/8.1.png'),
+            },
+            //  {
+            //     id:4,
+            //     title:"福利",
+            //     title_t:"WELFARE",
+            //     path:'/public_box_home/Roll',
+            //     img1:require('../assets/header/topBar/3-1.png'),
+            //     img2:require('../assets/header/topBar/3.png'),
+            // },
+            {
+                id:6,
                 title:"常见问题",
                 title_t:"QUESTIONS",
                 path:'/public_box_home/faq',
@@ -201,6 +257,7 @@ export default {
         // console.log(_this.stateRegister);
         if(content==1){
             _this.stateRegister=true;
+            _this.back_bg=true;
             _this.loginTu=true;
             // console.log(_this.stateRegister);
         }
@@ -212,8 +269,11 @@ export default {
         if(data=="/public_box_home/openBox"){
             _this.id=1;
         }
-        if(data=="/public_box_home/ROLLactivelyDetail"){
+        if(data=="/public_box_home/dailyFreeNew/dailyFreeChildren"){
             _this.id=3
+        }
+        if(data=="/public_box_home/spread" || data=="/public_box_home/spreadCenter"){
+            _this.id=4
         }
         this.list.forEach(function (value) {
             if(data==value.path){
@@ -237,6 +297,7 @@ export default {
           this.loginTu = false;
       }
         var message = localStorage.getItem('message');
+      
         if(message!=null){
             this.mmoney=message
         }else{
@@ -330,9 +391,12 @@ export default {
         });
       },
       handleBack_bg(){
+          this.verification=false;
+          this.xiugai=false;
           this.back_bg=false;
-          // this.img1_box=false;
           this.stateRegister=false;
+          this.stateRigister1=false;
+          this.stateRigister2=false;
           this.stateRigister=false;
           this.stateSteamRegister=false;
           this.move();
@@ -389,7 +453,8 @@ export default {
             this.stateRegister=false;
             this.img1_box=true
             this.back_bg=false;
-            this.loginTu=false
+            this.loginTu=false;
+            this.verification=false;
             this.move();
             this.getMoney()
 
@@ -412,14 +477,35 @@ export default {
             })
       },
       change(e){        //是否显示注册页面
-            this.stateRigister=true,
-            this.stateRegister=false
+            this.stateRigister=true;
+            this.stateRegister=false;
             this.back_bg=true
             this.stop();
+      },
+      showLogin(code){   //是否显示注册1页面
+            this.topcode=code;
+            this.stateRigister1=true;
+            this.stateRigister=false;
+            this.back_bg=true
+            this.stop();
+      },
+      showLogin1(e){   //是否显示注册1页面
+            this.stateRigister2=true;
+            this.stateRigister1=false;
+            this.back_bg=true;
+            this.stop();
+            console.log("--------------");
+      },
+      showLogin2(e){   //是否直接注册不进行下一步
+        this.stateRigister1=false;
+        this.stateRigister2=false;
+        this.stateRegister=true;
+        this.loginTu=false;
       },
       showRigister(e){   //是否显示登录页面
             this.stateRigister=false,
             this.stateRegister=true;
+            console.log();
             this.back_bg=true
             this.stop();
       },
@@ -483,7 +569,7 @@ export default {
        
     }
     .header_title{
-        margin-left: 6px;
+        margin: 0px 6px;
         color: #fff;
         display:flex;
         align-items: center;
@@ -571,8 +657,21 @@ export default {
         display: flex;
         align-items: center;
         justify-content: center;
+        flex-direction: column;
         margin-left: 5px;
-        position: relative;
+        width: 120px;
+        height: 40px;
+        background-image: linear-gradient(90deg, #E60064 0%, #E65064 100%);
+        border-radius: 12px;
+    }
+    .img1_box2 p{
+        width: 100%;
+        font-family: SourceHanSansCN-Bold;
+        font-size: 12px;
+        color: #FFFFFF;
+        letter-spacing: 0;
+        text-align: center;
+
     }
     .img1_box3{
           width: 60px;
@@ -599,10 +698,10 @@ export default {
     }
     .black_bg{
         width: 100%;
-        height: 1080px;
+        height: 2000px;
         position: fixed;
         background: #000;
-        opacity: 0.3;
+        opacity: 0.8;
         z-index: 50;
     }
     .topbarBox{
@@ -627,9 +726,10 @@ export default {
     .yingyu{
         font-size: 10px;
         text-decoration: none;
+        font-family: SourceHanSansCN-Regular;
     }
     .text_header{
-        font-size: 14px;
+        font-size: 12px;
     }
     .xiaotubiao{
         width: 42px;

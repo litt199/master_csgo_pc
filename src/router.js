@@ -32,6 +32,32 @@ export default new Router({
         //   component: () => import(/* webpackChunkName: "about" */ './views/dailyFree.vue')
         // },
         {
+          path: '/public_box_home/spread',
+          name: 'spread',
+          component: () => import(/* webpackChunkName: "about" */ './views/spread/spread.vue')
+        },
+        {
+          path: '/public_box_home/dailyFreeNew',
+          name: 'dailyFreeNew',
+          component: () => import(/* webpackChunkName: "about" */ './views/dailyFreeNew.vue'),
+          children:[
+            {
+              redirect:'/public_box_home/dailyFreeNew/dailyFreeChildren',
+              path:'/'
+            },
+            {
+              path: '/public_box_home/dailyFreeNew/dailyFreeChildren',
+              name: 'dailyFreeChildren',
+              component: () => import( './views/dailyFreeChildren.vue')
+            },
+            {
+              path: '/public_box_home/dailyFreeNew/Roll',
+              name: 'Roll',
+              component: () => import( './views/ROLLwelfare.vue')
+            }
+          ]
+        },
+        {
           path: '/public_box_home/faq',
           name: 'faq',
           component: () => import(/* webpackChunkName: "about" */ './views/faq.vue')
@@ -64,7 +90,7 @@ export default new Router({
         {
           path: '/public_box_home/myCenter',
           name: 'myCenter',
-          component: () => import(/* webpackChunkName: "about" */ './views/myCenter.vue')
+          component: () => import(/* webpackChunkName: "about" */ './views/myCenter1.vue')
         },
         
         {
@@ -81,6 +107,11 @@ export default new Router({
           path: '/public_box_home/exchangeMall',
           name: 'exchangeMall',
           component: () => import(/* webpackChunkName: "about" */ './views/exchangeMall.vue')
+        },
+        {
+          path: '/public_box_home/spreadCenter',
+          name: 'spreadCenter',
+          component: () => import(/* webpackChunkName: "about" */ './views/spread/spreadCenter.vue')
         },
       ]
     },

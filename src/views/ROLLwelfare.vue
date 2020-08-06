@@ -1,33 +1,5 @@
 <template>
-  <div class="welfare1">
-      <div class="bg">
-        <img  :src="imgbg" alt="">
-      </div>
-      <!-- <div class="ROLLfuli123">
-          ROLL福利
-      </div> -->
-      <div class="diceng" v-show="knowimg">
-          <img class="diceng_bg" src="../assets/ROLL/8.png" alt="">
-            <!-- <marquee  class="dicent_text" width=800 behavior=scroll direction=left  align=middle>{{this.$store.state.mes}}</marquee> -->
 
-            <vue-seamless-scroll
-                :data="newsList"  
-                class="dicent_text"
-                :class-option="optionLeft"
-            >
-               <ul class="item">
-                  <li class="li" v-for="(item,index) in newsList" :key="index">
-                      <span class="title" v-text="item.content"></span>
-                  </li>
-              </ul>
-            </vue-seamless-scroll>
-          <div class="know" v-cursor @click="know">知道了</div>
-          <!-- <img src="../assets/ROLL/9.png" class="know" @click="know" alt=""> -->
-        </div>
-      <div class="box_left_box">
-          <!-- <div class="box_left"> -->
-              <!-- <publicBoxLeft class="public_box"></publicBoxLeft> -->
-          <!-- </div> -->
            <div class="box_right" >
               
              <div class="Double_box">
@@ -66,11 +38,14 @@
                         :total="total"
                     
                     ></el-pagination>
+
+
+          
           </div>
-      </div>
+
       
      <!-- <rechargeMoney></rechargeMoney> -->
-  </div>
+
 </template>
 
 <script>
@@ -91,6 +66,7 @@ export default {
    computed: {
       optionLeft () {
           return {
+       
                   direction: 0,
                   limitMoveNum: 2,
                   singleHeight:19,
@@ -100,6 +76,7 @@ export default {
     },
   data() {
     return {
+  
        imgbg:this.$store.getters.neiimg2.image,
        newsList: [{
          "content":1234
@@ -159,18 +136,26 @@ export default {
         this.current=1;
         this.total=res.total;
         this.fir = res.data;
+      }else{
+        this.current=1;
+        this.total=0;
+        this.fir = [];
       }
     })
   },
   methods:{
+  
     know(){
       this.knowimg=false
     },
-    Rollmessage(e){   //跳转
-      this.$router.push({  
-        path: 'ROLLactivelyDetail', 
-        query: {Rollid: e}
+    Rollmessage(e){
+
+         this.$router.push({  
+          path: '/public_box_home/ROLLactivelyDetail', 
+          query: {Rollid: e}
         })
+      
+     
     },
 
     //获取全部下拉列表
@@ -192,6 +177,11 @@ export default {
             // console.log("-----------------父组件current" + this.current);
             this.total=res.total;
             this.fir = res.data;
+          }else{
+            this.current=1;
+            // console.log("-----------------父组件current" + this.current);
+            this.total=0;
+            this.fir = [];
           }
         })
     },
@@ -206,6 +196,9 @@ export default {
           if(res!=undefined){
             this.total=res.total;
             this.fir = res.data;
+          }else{
+            this.total=0;
+            this.fir = [];
           }
         })
      },
@@ -214,15 +207,7 @@ export default {
 </script>
 
 <style scoped>
-.welfare1{
-    width: 1280px;
-    padding-bottom: 20px;
-    /* background-color: #0d0c0e; */
-    margin:0 auto;
-    position: absolute;
-    left: 0;
-    top: 0;
-}
+
 
 .ROLLfuli123{
   position: absolute;
@@ -323,6 +308,7 @@ export default {
     top: 1130px;
     right: 100px;
 }
+
 
 </style>
 

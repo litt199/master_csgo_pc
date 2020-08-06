@@ -181,7 +181,7 @@ export default {
     }
     .more_box .button{
       /* margin-right: 20px; */
-      margin-top: 15px;
+      margin-top: 40px;
       margin-bottom: 20px;
       
     }

@@ -159,8 +159,8 @@
 </template>
 
 <script>
-import { AudioPlayer } from '../components/packages'
-// import '@liripeng/vue-audio-player/lib/vue-audio-player.css'
+
+
 
 import Bus from '../axios/Bus'
 import fiveliankai from './fiveTanchuang'
@@ -190,7 +190,7 @@ export default {
       rechargeMoney,
       recharge,
       fiveliankai,
-      AudioPlayer,
+
   },
    computed: {
       optionLeft () {
@@ -829,9 +829,7 @@ export default {
     top: 1250px;
     right: 100px;
 }
-.csgo .audio-player{
-    display: none;
-}
+
 .closeMusic{
      position: absolute;
     right: 133px;

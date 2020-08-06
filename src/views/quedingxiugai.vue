@@ -109,12 +109,11 @@ export default {
                     if(res.code==1){
                         Message({
                                 duration:3000,                                 //element-ui中的展示请求错误的信息
-                                message:"该手机号已经注册",
+                                message:"修改密码出错,请重新修改",
                                 type:'error'
                             })
                     }else{
                         this.$emit('none_login')
-      
                         this.password=""
                         this.password1=""
 
